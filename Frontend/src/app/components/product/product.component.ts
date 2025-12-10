@@ -17,7 +17,6 @@ import { ImageSearchService, SearchResult } from '../../services/image-search/im
 })
 export class ProductComponent implements OnInit {
   products: Product[] = [];
-  // Biến này không còn dùng để lọc client nữa, nhưng giữ lại để hứng data cho Image Search nếu cần
   filteredProducts: Product[] = []; 
 
   loadingImage = false;
@@ -90,18 +89,17 @@ export class ProductComponent implements OnInit {
     this.productService.getProducts(
       page,
       this.pageSize,
-      this.searchTerm,       // Tên
-      this.selectedCategoryId, // Danh mục
-      this.selectedBrandId,    // Thương hiệu
-      this.selectedMinPrice,   // Giá min
-      maxPriceToSend           // Giá max
+      this.searchTerm,       
+      this.selectedCategoryId, 
+      this.selectedBrandId,  
+      this.selectedMinPrice,   
+      maxPriceToSend           
     ).subscribe((response) => {
       this.products = response.items;
       this.totalProductsFromServer = response.total;
       this.currentPage = page;
       this.isImageSearchActive = false;
       
-      // Đồng bộ filteredProducts (để tránh lỗi nếu HTML còn dùng biến này)
       this.filteredProducts = this.products;
     }, err => {
       console.error('Error loading products', err);

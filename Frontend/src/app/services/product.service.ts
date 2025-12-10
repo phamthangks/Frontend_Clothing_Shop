@@ -31,6 +31,7 @@ export class ProductService {
   getProductDetail(id: number): Observable<ProductDetailViewModel> {
     return this.http.get<ProductDetailViewModel>(`${this.baseUrl}/${id}`);
   }
+  ////////////////////////////////////
  getProducts(
     page: number,
     itemsPerPage: number,
