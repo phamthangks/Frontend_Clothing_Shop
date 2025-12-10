@@ -1,0 +1,126 @@
+<div class="modern-dialog view-dialog">
+  <div class="dialog-header">
+    <div class="header-icon info">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    <div class="header-text">
+      <h2 class="dialog-title">Thông tin người dùng</h2>
+      <p class="dialog-subtitle">Chi tiết tài khoản người dùng</p>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="dialog-content">
+    <!-- User Avatar Section -->
+    <div class="user-avatar-section">
+      <div class="avatar-circle">
+        <i class="fas fa-user"></i>
+      </div>
+      <div class="avatar-info">
+        <h3 class="user-name">{{ data.fullname || 'Chưa cập nhật' }}</h3>
+        <div class="user-status" [class.active]="data.isActive" [class.inactive]="!data.isActive">
+          <i class="fas fa-circle"></i>
+          <span>{{ data.isActive ? 'Đang hoạt động' : 'Không hoạt động' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Information Grid -->
+    <div class="info-section">
+      <div class="section-header">
+        <i class="fas fa-info-circle"></i>
+        <span>Thông tin cơ bản</span>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">
+            <i class="fas fa-id-badge"></i>
+            ID
+          </div>
+          <div class="info-value">#{{ data.id }}</div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-label">
+            <i class="fas fa-phone"></i>
+            Số điện thoại
+          </div>
+          <div class="info-value">{{ data.phoneNumber }}</div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-label">
+            <i class="fas fa-user-shield"></i>
+            Vai trò
+          </div>
+          <div class="info-value">
+            <span class="role-badge">{{ displayRoleName }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Accounts -->
+    <div class="info-section">
+      <div class="section-header">
+        <i class="fas fa-share-alt"></i>
+        <span>Tài khoản mạng xã hội</span>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">
+            <i class="fab fa-facebook"></i>
+            Facebook ID
+          </div>
+          <div class="info-value">{{ data.facebookAccountId || 'Chưa liên kết' }}</div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-label">
+            <i class="fab fa-google"></i>
+            Google ID
+          </div>
+          <div class="info-value">{{ data.googleAccountId || 'Chưa liên kết' }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Timestamps -->
+    <div class="info-section">
+      <div class="section-header">
+        <i class="fas fa-clock"></i>
+        <span>Thời gian</span>
+      </div>
+      
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">
+            <i class="far fa-calendar-plus"></i>
+            Ngày tạo
+          </div>
+          <div class="info-value">{{ data.createdAt | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+
+        <div class="info-item">
+          <div class="info-label">
+            <i class="far fa-calendar-check"></i>
+            Cập nhật lần cuối
+          </div>
+          <div class="info-value">{{ data.updatedAt | date:'dd/MM/yyyy HH:mm' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button 
+      mat-raised-button 
+      class="btn-close" 
+      mat-dialog-close>
+      <i class="fas fa-times"></i>
+      Đóng
+    </button>
+  </div>
+</div>
+

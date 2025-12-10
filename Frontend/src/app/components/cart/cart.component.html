@@ -1,0 +1,105 @@
+<!-- Bắt đầu trang Giỏ hàng -->
+<div class="cart-page">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Bảng các sản phẩm trong giỏ -->
+            <div class="col-lg-8">
+                <div class="cart-page-inner">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>
+                                        <div class="checkbox-container">
+                                            <!-- Checkbox "Chọn tất cả" -->
+                                            <input type="checkbox" #selectAll [checked]="isAllSelected()"
+                                                (change)="toggleSelectAll(selectAll.checked)" />
+                                            <span>Lựa chọn</span>
+                                        </div>
+                                    </th>
+
+                                    <th>Sản phẩm</th>
+                                    <th>Size</th> 
+                                    <th>Màu sắc</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng giá</th>
+                                    <th>Xoá</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody class="align-middle">
+                                <tr *ngFor="let item of cartItems" [attr.id]="'item-' + item.id">
+                                    <td>
+                                        <input type="checkbox" [value]="item.id" [checked]="isSelected(item.id)"
+                                            #checkbox (change)="toggleSelection(item.id, checkbox.checked)" />
+                                    </td>
+                                    <td>
+                                        <div class="img">
+                                            <a href="#"><img [src]="getImageUrl(item.image)" alt="Image" /></a>
+                                            <p>{{ item.name }}</p>
+                                        </div>
+                                    </td>
+
+                                    <!-- Size -->
+                                    <td>{{ item.size || '-' }}</td>
+                                    
+                                    <!-- Color -->
+                                    <td>{{ item.color || '-' }}</td>
+                                   
+                                    <td>{{ item.price | number:'1.0-0' }}₫</td>
+
+                                    <td>
+                                        <div class="qty">
+                                            <button class="btn-minus" (click)="updateCart(item.id, 'decrease')">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                            <input type="text" [value]="item.numberOfProducts" readonly />
+                                            <button class="btn-plus" (click)="updateCart(item.id, 'increase')">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="total-price">
+                                    {{ (item.price * item.numberOfProducts) | number:'1.0-0' }}₫
+
+                                    </td>
+                                    <td>
+                                        <button class="btn-delete" (click)="deleteItem(item.id)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phần Tóm tắt Giỏ hàng -->
+            <div class="col-lg-4">
+                <div class="cart-page-inner">
+                    <div class="cart-summary">
+                        <div class="cart-content">
+                            <h1>Tóm tắt đơn hàng</h1>
+                            <p>
+                                Tạm tính
+                                <span id="sub-total">{{ subTotal | number:'1.0-0' }}₫</span>
+                            </p>
+                            <p>Chi phí vận chuyển <span>1,000₫</span></p>
+                            <h2>
+                                Tổng thanh toán
+                                <span id="grand-total">{{ grandTotal | number:'1.0-0' }}₫</span>
+                            </h2>
+                        </div>
+                        <div class="cart-btn">
+                            <button type="button" (click)="proceedToCheckout()">Thanh toán</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Kết thúc trang Giỏ hàng -->

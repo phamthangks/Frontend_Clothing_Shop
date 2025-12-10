@@ -1,0 +1,377 @@
+<div class="container-fluid px-4 py-4">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-0 text-gray-800">
+        <i class="fas fa-layer-group me-2"></i>Quản lý biến thể sản phẩm
+      </h1>
+      <p class="text-muted small mb-0">Quản lý màu sắc, kích thước và tồn kho của sản phẩm</p>
+    </div>
+    <div>
+      <button class="btn btn-primary" (click)="openCreateDialog()">
+        <i class="fas fa-plus me-2"></i>Thêm biến thể
+      </button>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Tổng số biến thể
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ variants.length }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-layer-group fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Còn hàng
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ getInStockCount() }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                Tồn kho thấp (&lt;10)
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ getLowStockCount() }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-exclamation-triangle fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                Hết hàng
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">
+                {{ getOutOfStockCount() }}
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters & Controls -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">
+        <i class="fas fa-filter me-2"></i>Lọc và tìm kiếm
+      </h6>
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Search -->
+        <div class="col-md-3">
+          <label class="form-label">Tìm kiếm</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Tìm màu sắc, kích thước, sản phẩm..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+          />
+        </div>
+
+        <!-- Product Filter -->
+        <div class="col-md-3">
+          <label class="form-label">Sản phẩm</label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedProductId"
+            (ngModelChange)="onProductChange()"
+          >
+            <option [ngValue]="null">Tất cả sản phẩm</option>
+            <option *ngFor="let product of products" [ngValue]="product.id">
+              {{ product.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Color Filter -->
+        <div class="col-md-2">
+          <label class="form-label">Màu sắc</label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedColor"
+            (ngModelChange)="onFilterChange()"
+          >
+            <option value="">Tất cả màu</option>
+            <option *ngFor="let color of availableColors" [value]="color">
+              {{ color }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Size Filter -->
+        <div class="col-md-2">
+          <label class="form-label">Kích thước</label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedSize"
+            (ngModelChange)="onFilterChange()"
+          >
+            <option value="">Tất cả kích thước</option>
+            <option *ngFor="let size of availableSizes" [value]="size">
+              {{ size }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Sort By -->
+        <div class="col-md-2">
+          <label class="form-label">Sắp xếp theo</label>
+          <select
+            class="form-select"
+            [(ngModel)]="sortBy"
+            (ngModelChange)="onSortChange()"
+          >
+            <option value="id">ID</option>
+            <option value="product">Sản phẩm</option>
+            <option value="color">Màu sắc</option>
+            <option value="size">Kích thước</option>
+            <option value="price">Giá</option>
+            <option value="stock">Tồn kho</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-12">
+          <button class="btn btn-secondary btn-sm me-2" (click)="clearFilters()">
+            <i class="fas fa-times me-1"></i>Xóa bộ lọc
+          </button>
+          <button class="btn btn-info btn-sm" (click)="toggleView()">
+            <i class="fas" [ngClass]="viewMode === 'table' ? 'fa-th' : 'fa-list'"></i>
+            Chuyển chế độ xem
+          </button>
+          <span class="text-muted ms-3">
+            Hiển thị {{ filteredVariants.length }} / {{ variants.length }} biến thể
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table View -->
+  <div class="card shadow mb-4" *ngIf="viewMode === 'table'">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Danh sách biến thể</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Sản phẩm</th>
+              <th>Màu sắc</th>
+              <th>Kích thước</th>
+              <th>Giá</th>
+              <th>Tồn kho</th>
+              <th>Trạng thái</th>
+              <th style="width: 150px">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let variant of filteredVariants">
+              <td>{{ variant.id }}</td>
+              <td>
+                <div class="fw-bold">{{ variant.product?.name || 'N/A' }}</div>
+                <small class="text-muted">
+                  {{ variant.product?.category?.name || '' }} |
+                  {{ variant.product?.brand?.name || '' }}
+                </small>
+              </td>
+              <td>
+                <span class="badge" [style.background-color]="variant.color" [style.color]="'white'">
+                  {{ variant.color }}
+                </span>
+              </td>
+              <td>
+                <span class="badge bg-secondary">{{ variant.size }}</span>
+              </td>
+              <td class="text-end">{{ variant.price | currency: 'VND':'symbol':'1.0-0' }}</td>
+              <td class="text-center">
+                <span [class]="getStockClass(variant.stockQuantity)">
+                  <i [class]="getStockIcon(variant.stockQuantity)"></i>
+                  {{ variant.stockQuantity }}
+                </span>
+              </td>
+              <td>
+                <span
+                  class="badge"
+                  [ngClass]="{
+                    'bg-success': variant.stockQuantity > 10,
+                    'bg-warning': variant.stockQuantity > 0 && variant.stockQuantity <= 10,
+                    'bg-danger': variant.stockQuantity === 0
+                  }"
+                >
+                  {{
+                    variant.stockQuantity === 0
+                      ? 'Hết hàng'
+                      : variant.stockQuantity < 10
+                      ? 'Tồn kho thấp'
+                      : 'Bình thường'
+                  }}
+                </span>
+              </td>
+              <td>
+                <div class="btn-group" role="group">
+                  <button
+                    class="btn btn-sm btn-info"
+                    (click)="openEditDialog(variant)"
+                    title="Sửa"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger"
+                    (click)="openDeleteDialog(variant)"
+                    title="Xóa"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="filteredVariants.length === 0">
+              <td colspan="8" class="text-center text-muted py-4">
+                <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                Chưa có dữ liệu biến thể
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid View -->
+  <div class="row" *ngIf="viewMode === 'grid'">
+    <div class="col-md-4 mb-4" *ngFor="let variant of filteredVariants">
+      <div class="card shadow h-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <h5 class="card-title mb-0">{{ variant.product?.name || 'N/A' }}</h5>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': variant.stockQuantity > 10,
+                'bg-warning': variant.stockQuantity > 0 && variant.stockQuantity <= 10,
+                'bg-danger': variant.stockQuantity === 0
+              }"
+            >
+              {{
+                variant.stockQuantity === 0
+                  ? 'Hết hàng'
+                  : variant.stockQuantity < 10
+                  ? 'Tồn kho thấp'
+                  : 'Bình thường'
+              }}
+            </span>
+          </div>
+
+          <div class="mb-2">
+            <small class="text-muted">
+              {{ variant.product?.category?.name || '' }} |
+              {{ variant.product?.brand?.name || '' }}
+            </small>
+          </div>
+
+          <hr />
+
+          <div class="row g-2 mb-3">
+            <div class="col-6">
+              <div class="text-muted small">Màu sắc</div>
+              <span class="badge" [style.background-color]="variant.color" [style.color]="'white'">
+                {{ variant.color }}
+              </span>
+            </div>
+            <div class="col-6">
+              <div class="text-muted small">Kích thước</div>
+              <span class="badge bg-secondary">{{ variant.size }}</span>
+            </div>
+            <div class="col-6">
+              <div class="text-muted small">Giá</div>
+              <div class="fw-bold">{{ variant.price | currency: 'VND':'symbol':'1.0-0' }}</div>
+            </div>
+            <div class="col-6">
+              <div class="text-muted small">Tồn kho</div>
+              <div [class]="getStockClass(variant.stockQuantity)">
+                <i [class]="getStockIcon(variant.stockQuantity)"></i>
+                {{ variant.stockQuantity }}
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button
+              class="btn btn-sm btn-info flex-fill"
+              (click)="openEditDialog(variant)"
+            >
+              <i class="fas fa-edit me-1"></i>Sửa
+            </button>
+            <button
+              class="btn btn-sm btn-danger flex-fill"
+              (click)="openDeleteDialog(variant)"
+            >
+              <i class="fas fa-trash me-1"></i>Xóa
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12" *ngIf="filteredVariants.length === 0">
+      <div class="card shadow">
+        <div class="card-body text-center text-muted py-5">
+          <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+          Chưa có dữ liệu biến thể
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

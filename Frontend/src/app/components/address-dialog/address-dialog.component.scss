@@ -1,0 +1,24 @@
+.modal-dialog {
+  max-width: 70vh;  /* Độ rộng tùy ý */
+  margin: auto;
+}
+
+.modal-content {
+  max-height: 70vh;  /* Giới hạn chiều cao */
+  overflow-y: auto;  /* Cuộn dọc khi nội dung quá lớn */
+}
+
+.modal-header {
+  background-color: transparent !important; /* Bỏ màu nền header */
+  color: #000 !important;                  /* Đổi text về đen */
+}
+
+//  Nếu muốn backdrop trong suốt:
+.modal-backdrop.show {
+  opacity: 0 !important;
+}
+
+.modal-content {
+  border: none !important;
+  box-shadow: none !important;
+}

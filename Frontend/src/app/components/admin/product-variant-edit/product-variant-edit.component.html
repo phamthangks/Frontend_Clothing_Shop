@@ -1,0 +1,269 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <i class="fas fa-edit me-2"></i>Chỉnh sửa biến thể sản phẩm
+    </h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <!-- Product Info (Read-only) -->
+    <div class="alert alert-info" role="alert">
+      <div class="d-flex align-items-center">
+        <i class="fas fa-info-circle me-2"></i>
+        <div>
+          <strong>Thông tin sản phẩm</strong><br />
+          <span>{{ originalVariant.product?.name }}</span>
+          <span class="ms-2 text-muted">
+            ({{ originalVariant.product?.category?.name }} |
+            {{ originalVariant.product?.brand?.name }})
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <form #variantForm="ngForm">
+      <!-- Color Selection -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Màu sắc</label>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="colorType"
+            id="predefinedColor"
+            [value]="false"
+            [(ngModel)]="isCustomColor"
+            (ngModelChange)="onColorTypeChange()"
+          />
+          <label class="form-check-label" for="predefinedColor">
+            Chọn màu có sẵn
+          </label>
+        </div>
+
+        <div *ngIf="!isCustomColor" class="color-grid mb-3">
+          <div
+            *ngFor="let color of predefinedColors"
+            class="color-option"
+            [class.selected]="variant.color === color.value"
+            (click)="variant.color = color.value"
+          >
+            <div
+              class="color-box"
+              [style.background-color]="color.color"
+              [style.border]="
+                color.value === 'White' ? '1px solid #ddd' : 'none'
+              "
+            ></div>
+            <div class="color-name">{{ color.name }}</div>
+          </div>
+        </div>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="colorType"
+            id="customColor"
+            [value]="true"
+            [(ngModel)]="isCustomColor"
+            (ngModelChange)="onColorTypeChange()"
+          />
+          <label class="form-check-label" for="customColor">
+            Màu sắc tùy chỉnh
+          </label>
+        </div>
+
+        <input
+          *ngIf="isCustomColor"
+          type="text"
+          class="form-control"
+          [(ngModel)]="customColor"
+          name="customColor"
+          placeholder="Nhập màu sắc tùy chỉnh (ví dụ: Xanh navy)"
+          [required]="isCustomColor"
+        />
+
+        <small class="text-muted d-block mt-1">
+          Màu sắc gốc: <strong>{{ originalVariant.color }}</strong>
+        </small>
+      </div>
+
+      <!-- Size Selection -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Kích thước</label>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="sizeType"
+            id="predefinedSize"
+            [value]="false"
+            [(ngModel)]="isCustomSize"
+            (ngModelChange)="onSizeTypeChange()"
+          />
+          <label class="form-check-label" for="predefinedSize">
+            Chọn kích thước có sẵn
+          </label>
+        </div>
+
+        <div *ngIf="!isCustomSize" class="size-grid mb-3">
+          <button
+            *ngFor="let size of predefinedSizes"
+            type="button"
+            class="btn size-btn"
+            [class.btn-primary]="variant.size === size"
+            [class.btn-outline-secondary]="variant.size !== size"
+            (click)="variant.size = size"
+          >
+            {{ size }}
+          </button>
+        </div>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="sizeType"
+            id="customSize"
+            [value]="true"
+            [(ngModel)]="isCustomSize"
+            (ngModelChange)="onSizeTypeChange()"
+          />
+          <label class="form-check-label" for="customSize"> Kích thước tùy chỉnh </label>
+        </div>
+
+        <input
+          *ngIf="isCustomSize"
+          type="text"
+          class="form-control"
+          [(ngModel)]="customSize"
+          name="customSize"
+          placeholder="Nhập kích thước tùy chỉnh (ví dụ: 32/34)"
+          [required]="isCustomSize"
+        />
+
+        <small class="text-muted d-block mt-1">
+          Kích thước gốc: <strong>{{ originalVariant.size }}</strong>
+        </small>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Giá (VND)</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="variant.price"
+          name="price"
+          placeholder="Nhập giá"
+          required
+          min="0"
+          step="1000"
+        />
+        <small class="text-muted d-block mt-1">
+          Giá gốc:
+          <strong>{{ originalVariant.price | currency: 'VND':'symbol':'1.0-0' }}</strong>
+        </small>
+      </div>
+
+      <!-- Stock Quantity -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Số lượng tồn kho</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="variant.stockQuantity"
+          name="stockQuantity"
+          placeholder="Nhập số lượng tồn kho"
+          required
+          min="0"
+        />
+        <small class="text-muted d-block mt-1">
+          Tồn kho gốc: <strong>{{ originalVariant.stockQuantity }}</strong>
+        </small>
+      </div>
+
+      <!-- Changes Summary -->
+      <div class="card bg-light" *ngIf="hasChanges()">
+        <div class="card-body">
+          <h6 class="card-title">
+            <i class="fas fa-exchange-alt me-2"></i>Tóm tắt thay đổi
+          </h6>
+          <div class="row">
+            <div class="col-6" *ngIf="variant.color !== originalVariant.color">
+              <small class="text-muted">Màu sắc:</small>
+              <div>
+                <del class="text-danger">{{ originalVariant.color }}</del>
+                →
+                <strong class="text-success">{{
+                  isCustomColor ? customColor : variant.color
+                }}</strong>
+              </div>
+            </div>
+            <div class="col-6" *ngIf="variant.size !== originalVariant.size">
+              <small class="text-muted">Kích thước:</small>
+              <div>
+                <del class="text-danger">{{ originalVariant.size }}</del>
+                →
+                <strong class="text-success">{{
+                  isCustomSize ? customSize : variant.size
+                }}</strong>
+              </div>
+            </div>
+            <div class="col-6" *ngIf="variant.price !== originalVariant.price">
+              <small class="text-muted">Giá:</small>
+              <div>
+                <del class="text-danger">{{
+                  originalVariant.price | currency: 'VND':'symbol':'1.0-0'
+                }}</del>
+                →
+                <strong class="text-success">{{
+                  variant.price | currency: 'VND':'symbol':'1.0-0'
+                }}</strong>
+              </div>
+            </div>
+            <div
+              class="col-6"
+              *ngIf="variant.stockQuantity !== originalVariant.stockQuantity"
+            >
+              <small class="text-muted">Tồn kho:</small>
+              <div>
+                <del class="text-danger">{{ originalVariant.stockQuantity }}</del>
+                →
+                <strong class="text-success">{{ variant.stockQuantity }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning mt-3" *ngIf="!hasChanges()">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Chưa có thay đổi nào
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="onCancel()"
+      [disabled]="loading"
+    >
+      <i class="fas fa-times me-1"></i>Hủy
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onSubmit()"
+      [disabled]="loading || !variantForm.valid || !hasChanges()"
+    >
+      <i class="fas fa-save me-1" *ngIf="!loading"></i>
+      <i class="fas fa-spinner fa-spin me-1" *ngIf="loading"></i>
+      {{ loading ? 'Đang lưu...' : 'Lưu thay đổi' }}
+    </button>
+  </mat-dialog-actions>
+</div>

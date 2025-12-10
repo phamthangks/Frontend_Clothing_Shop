@@ -1,0 +1,65 @@
+<!-- Top bar Start -->
+<div class="top-bar">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <i class="fa fa-envelope"></i> support&#64;email.com
+            </div>
+            <div class="col-sm-6">
+                <i class="fa fa-phone-alt"></i> +012-345-6789
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Top bar End -->
+
+<!-- Nav Bar Start -->
+<div class="nav">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+            <a routerLink="/" class="navbar-brand">MENU</a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav mr-auto">
+                    <a routerLink="/home" class="nav-item nav-link" [class.active]="activeRoute('/home')">Trang chủ</a>
+                    <a routerLink="/product" class="nav-item nav-link"
+                        [class.active]="activeRoute('/product')">Sản phẩm</a>
+                    <a routerLink="/cart" class="nav-item nav-link" [class.active]="activeRoute('/cart')">Giỏ hàng</a>
+                    <a routerLink="/account" class="nav-item nav-link" [class.active]="activeRoute('/account')">Quản lý</a>
+                </div>
+                <div class="navbar-nav ml-auto">
+                    <app-useraccess></app-useraccess>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Nav Bar End -->
+<!-- Bottom Bar Start -->
+<div class="bottom-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-3">
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="assets/img/logo.png" alt="Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-3">
+                <div class="user">
+                    <a class="btn cart">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bottom Bar End -->

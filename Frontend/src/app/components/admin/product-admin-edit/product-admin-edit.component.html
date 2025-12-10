@@ -1,0 +1,249 @@
+<div class="modern-product-form">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-icon">
+      <i class="fas fa-edit"></i>
+    </div>
+    <div class="header-text">
+      <h2 class="form-title">Chỉnh sửa sản phẩm</h2>
+      <p class="form-subtitle">Cập nhật thông tin sản phẩm của bạn</p>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="loading-spinner">
+      <i class="fas fa-spinner fa-spin"></i>
+      <p>Đang tải thông tin sản phẩm...</p>
+    </div>
+  </div>
+
+  <form *ngIf="!isLoading" (ngSubmit)="onSubmit()" #editForm="ngForm" class="product-form">
+    
+    <!-- Basic Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-info-circle"></i>
+        <h3>Thông tin cơ bản</h3>
+      </div>
+      
+      <div class="form-grid">
+        <!-- Product Name -->
+        <div class="form-group full-width">
+          <label for="name" class="modern-label">
+            <i class="fas fa-tag"></i>
+            Tên sản phẩm
+            <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="name" 
+            class="modern-input" 
+            [(ngModel)]="productData.name" 
+            name="name" 
+            required
+            placeholder="Nhập tên sản phẩm...">
+        </div>
+        
+        <!-- Price -->
+        <div class="form-group">
+          <label for="price" class="modern-label">
+            <i class="fas fa-dollar-sign"></i>
+            Giá sản phẩm
+            <span class="required">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="price" 
+            class="modern-input" 
+            [(ngModel)]="productData.price" 
+            name="price" 
+            required
+            min="0"
+            placeholder="0">
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label for="category" class="modern-label">
+            <i class="fas fa-list"></i>
+            Danh mục
+          </label>
+          <select 
+            id="category" 
+            class="modern-select" 
+            [(ngModel)]="productData.categoryId" 
+            name="category">
+            <option [ngValue]="undefined">-- Chọn danh mục --</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+        
+        <!-- Brand -->
+        <div class="form-group">
+          <label for="brand" class="modern-label">
+            <i class="fas fa-copyright"></i>
+            Thương hiệu
+          </label>
+          <select 
+            id="brand" 
+            class="modern-select" 
+            [(ngModel)]="productData.brandId" 
+            name="brand">
+            <option [ngValue]="undefined">-- Chọn thương hiệu --</option>
+            <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+          </select>
+        </div>
+        
+        <!-- Description -->
+        <div class="form-group full-width">
+          <label for="description" class="modern-label">
+            <i class="fas fa-align-left"></i>
+            Mô tả sản phẩm
+          </label>
+          <textarea 
+            id="description" 
+            class="modern-textarea" 
+            [(ngModel)]="productData.description" 
+            name="description" 
+            rows="4"
+            placeholder="Nhập mô tả chi tiết về sản phẩm..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Images Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-images"></i>
+        <h3>Hình ảnh sản phẩm</h3>
+      </div>
+
+      <!-- Thumbnail Image -->
+      <div class="image-section">
+        <label class="modern-label">
+          <i class="fas fa-image"></i>
+          Ảnh đại diện
+        </label>
+        <input 
+          type="file" 
+          #thumbnailInput
+          (change)="onThumbnailSelect($event)"
+          accept="image/*"
+          class="d-none">
+        
+        <div class="thumbnail-upload-area">
+          <!-- New thumbnail preview -->
+          <div *ngIf="thumbnailPreview" class="image-preview-card">
+            <img [src]="thumbnailPreview" alt="New Thumbnail">
+            <button 
+              type="button" 
+              class="remove-image-btn"
+              (click)="removeThumbnailPreview()">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="image-badge new">Ảnh mới</div>
+          </div>
+
+          <!-- Current thumbnail -->
+          <div *ngIf="!thumbnailPreview && currentThumbnail" class="image-preview-card">
+            <img [src]="getImageUrl(currentThumbnail)" alt="Current Thumbnail">
+            <button 
+              type="button" 
+              class="edit-image-btn"
+              (click)="thumbnailInput.click()">
+              <i class="fas fa-edit"></i>
+            </button>
+            <div class="image-badge current">Ảnh hiện tại</div>
+          </div>
+
+          <!-- Upload placeholder -->
+          <div 
+            *ngIf="!thumbnailPreview && !currentThumbnail" 
+            class="upload-placeholder main"
+            (click)="thumbnailInput.click()">
+            <div class="upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="upload-text">Nhấn để chọn ảnh đại diện</p>
+            <small class="upload-hint">JPG, PNG, GIF, WEBP (tối đa 5MB)</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Images -->
+      <div class="image-section">
+        <label class="modern-label">
+          <i class="fas fa-images"></i>
+          Ảnh bổ sung
+        </label>
+        <input 
+          type="file" 
+          #additionalImagesInput
+          (change)="onAdditionalImagesSelect($event)"
+          accept="image/*"
+          multiple
+          class="d-none">
+        
+        <div class="additional-images-grid">
+          <!-- Current images from database -->
+          <div 
+            *ngFor="let image of currentAdditionalImages" 
+            class="image-preview-card small">
+            <img [src]="getImageUrl(image.imageUrl)" alt="Product image">
+            <button 
+              type="button" 
+              class="remove-image-btn"
+              (click)="markImageForDeletion(image.id)">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="image-badge current small">Hiện tại</div>
+          </div>
+
+          <!-- New images to upload -->
+          <div 
+            *ngFor="let image of newAdditionalImages; let i = index" 
+            class="image-preview-card small">
+            <img [src]="image.preview" alt="New image">
+            <button 
+              type="button" 
+              class="remove-image-btn"
+              (click)="removeNewAdditionalImage(i)">
+              <i class="fas fa-times"></i>
+            </button>
+            <div class="image-badge new small">Mới</div>
+          </div>
+
+          <!-- Add more button -->
+          <div 
+            class="upload-placeholder small"
+            (click)="additionalImagesInput.click()">
+            <i class="fas fa-plus"></i>
+            <span>Thêm ảnh</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn-cancel-modern" 
+        (click)="onCancel()"
+        [disabled]="isSubmitting">
+        <i class="fas fa-times"></i>
+        Hủy bỏ
+      </button>
+      <button 
+        type="submit" 
+        class="btn-update-modern"
+        [disabled]="!editForm.valid || isSubmitting">
+        <i class="fas fa-save"></i>
+        <span *ngIf="!isSubmitting">Cập nhật sản phẩm</span>
+        <span *ngIf="isSubmitting">Đang cập nhật...</span>
+      </button>
+    </div>
+    
+  </form>
+</div>

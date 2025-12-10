@@ -1,0 +1,139 @@
+<div class="modern-dialog">
+  <div class="dialog-header">
+    <div class="header-icon success">
+      <i class="fas fa-user-edit"></i>
+    </div>
+    <div class="header-text">
+      <h2 class="dialog-title">Chỉnh sửa người dùng</h2>
+      <p class="dialog-subtitle">Cập nhật thông tin tài khoản người dùng</p>
+    </div>
+  </div>
+
+  <div mat-dialog-content class="dialog-content">
+    <form #userForm="ngForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Basic Information -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="fas fa-info-circle"></i>
+          <span>Thông tin cơ bản</span>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="fill">
+            <mat-label><i class="fas fa-user"></i> Họ và tên</mat-label>
+            <input 
+              matInput 
+              [(ngModel)]="user.fullname" 
+              name="fullname"
+              placeholder="Nhập họ và tên..." />
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="fill">
+            <mat-label><i class="fas fa-phone"></i> Số điện thoại *</mat-label>
+            <input 
+              matInput 
+              [(ngModel)]="user.phoneNumber" 
+              name="phoneNumber" 
+              required 
+              pattern="^[0-9]{10}$" 
+              maxlength="10"
+              #phoneNumber="ngModel"
+              placeholder="Nhập số điện thoại 10 chữ số..." />
+            <mat-error *ngIf="phoneNumber.invalid && phoneNumber.touched">
+              Số điện thoại phải có đúng 10 chữ số
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Account Settings -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="fas fa-cog"></i>
+          <span>Cài đặt tài khoản</span>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field class="w-100" appearance="fill">
+            <mat-label><i class="fas fa-user-shield"></i> Vai trò *</mat-label>
+            <mat-select [(ngModel)]="user.roleId" name="roleId" required placeholder="Chọn vai trò...">
+              <mat-option *ngFor="let r of roles" [value]="r.id">
+                {{ r.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">
+            <i class="fas fa-toggle-on"></i>
+            Trạng thái
+          </label>
+          <div class="checkbox-wrapper">
+            <mat-checkbox [(ngModel)]="user.isActive" name="isActive" color="primary">
+              Kích hoạt tài khoản
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Accounts (Read-only) -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="fas fa-share-alt"></i>
+          <span>Tài khoản mạng xã hội</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="fill">
+              <mat-label><i class="fab fa-facebook"></i> Facebook ID</mat-label>
+              <input 
+                matInput 
+                type="number" 
+                [(ngModel)]="user.facebookAccountId" 
+                name="facebookAccountId" 
+                [disabled]="true"
+                placeholder="Chưa liên kết" />
+            </mat-form-field>
+          </div>
+
+          <div class="form-group">
+            <mat-form-field class="w-100" appearance="fill">
+              <mat-label><i class="fab fa-google"></i> Google ID</mat-label>
+              <input 
+                matInput 
+                type="number" 
+                [(ngModel)]="user.googleAccountId" 
+                name="googleAccountId" 
+                [disabled]="true"
+                placeholder="Chưa liên kết" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+      <div mat-dialog-actions class="dialog-actions">
+        <button 
+          mat-button 
+          class="btn-cancel" 
+          type="button" 
+          (click)="onCancel()">
+          <i class="fas fa-times"></i>
+          Hủy bỏ
+        </button>
+        <button 
+          mat-raised-button 
+          class="btn-update" 
+          type="submit"
+          [disabled]="!userForm.valid || !user.roleId">
+          <i class="fas fa-save"></i>
+          Cập nhật
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+<div class="modern-dialog">
+  <div class="dialog-header">
+    <div class="header-icon success">
+      <i class="fas fa-edit"></i>
+    </div>
+    <div class="header-text">
+      <h2 class="dialog-title">Cập nhật đơn hàng #{{ data.id }}</h2>
+      <p class="dialog-subtitle">Thay đổi trạng thái và thông tin đơn hàng</p>
+    </div>
+  </div>
+  
+  <div mat-dialog-content class="dialog-content">
+    <form class="order-form">
+      <!-- Order Info Section -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="fas fa-info-circle"></i>
+          <span>Thông tin đơn hàng</span>
+        </div>
+
+        <div class="info-display-grid">
+          <div class="info-display-item">
+            <label><i class="fas fa-hashtag"></i> Mã đơn hàng</label>
+            <div class="value">#{{ data.id }}</div>
+          </div>
+          <div class="info-display-item">
+            <label><i class="far fa-calendar"></i> Ngày đặt</label>
+            <div class="value">{{ data.orderDate | date: 'dd/MM/yyyy HH:mm' }}</div>
+          </div>
+          <div class="info-display-item">
+            <label><i class="fas fa-user"></i> Khách hàng</label>
+            <div class="value">{{ data.fullname }}</div>
+          </div>
+          <div class="info-display-item">
+            <label><i class="fas fa-phone"></i> Số điện thoại</label>
+            <div class="value">{{ data.phoneNumber }}</div>
+          </div>
+          <div class="info-display-item full-width">
+            <label><i class="fas fa-map-marker-alt"></i> Địa chỉ giao hàng</label>
+            <div class="value">{{ data.address }}</div>
+          </div>
+          <div class="info-display-item">
+            <label><i class="fas fa-dollar-sign"></i> Tổng tiền</label>
+            <div class="value amount">{{ (data.totalMoney || 0) | currency:'VND':'symbol':'1.0-0' }}</div>
+          </div>
+          <div class="info-display-item">
+            <label><i class="fas fa-credit-card"></i> Thanh toán</label>
+            <div class="value">{{ data.paymentMethod }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Update Section -->
+      <div class="form-section">
+        <div class="section-title">
+          <i class="fas fa-exchange-alt"></i>
+          <span>Cập nhật trạng thái</span>
+        </div>
+
+        <div class="status-update-container">
+          <div class="current-status">
+            <label>Trạng thái hiện tại</label>
+            <span [class]="'status-badge ' + getStatusClass(originalStatus)">
+              <i [class]="getStatusIcon(originalStatus)"></i>
+              {{ originalStatus | titlecase }}
+            </span>
+          </div>
+
+          <!-- Cannot update message -->
+          <div *ngIf="!canUpdateStatus()" class="status-locked">
+            <i class="fas fa-lock"></i>
+            <p>{{ getStatusMessage() }}</p>
+          </div>
+
+          <!-- Status selection -->
+          <div *ngIf="canUpdateStatus()" class="status-selector">
+            <label>Chọn trạng thái mới</label>
+            <select class="status-select" [(ngModel)]="order.status" name="status">
+              <option [value]="originalStatus" disabled>-- Chọn trạng thái mới --</option>
+              <option *ngFor="let s of availableStatuses" [value]="s">
+                {{ s | titlecase }}
+              </option>
+            </select>
+            
+            <!-- Status Flow Guide -->
+            <div class="status-guide">
+              <div class="guide-title">
+                <i class="fas fa-route"></i>
+                <span>Luồng cập nhật trạng thái</span>
+              </div>
+              <ul>
+                <li><strong>Pending</strong> → Processing hoặc Cancelled</li>
+                <li><strong>Processing</strong> → Shipped hoặc Cancelled</li>
+                <li><strong>Shipped</strong> → Delivered</li>
+                <li><strong>Delivered</strong> và <strong>Cancelled</strong>: Không thể thay đổi</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button 
+      mat-button
+      class="btn-cancel" 
+      (click)="onCancel()">
+      <i class="fas fa-times"></i>
+      Hủy bỏ
+    </button>
+    <button 
+      mat-raised-button 
+      class="btn-update" 
+      (click)="onSubmit()"
+      [disabled]="!canUpdateStatus() || order.status === originalStatus">
+      <i class="fas fa-save"></i>
+      Lưu thay đổi
+    </button>
+  </div>
+</div>
+
+

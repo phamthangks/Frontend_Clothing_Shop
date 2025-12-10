@@ -1,0 +1,230 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>
+      <i class="fas fa-plus-circle me-2"></i>Thêm biến thể sản phẩm
+    </h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form #variantForm="ngForm">
+      <!-- Product Selection -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Chọn sản phẩm</label>
+        <select
+          class="form-select"
+          [(ngModel)]="variant.productId"
+          name="productId"
+          (ngModelChange)="onProductChange()"
+          required
+        >
+          <option [ngValue]="0">Vui lòng chọn sản phẩm</option>
+          <option *ngFor="let product of products" [ngValue]="product.id">
+            {{ product.name }} - {{ product.price | currency: 'VND':'symbol':'1.0-0' }}
+          </option>
+        </select>
+        <small class="text-muted" *ngIf="getSelectedProduct()">
+          Danh mục: {{ getSelectedProduct()?.category?.name || 'N/A' }} |
+          Thương hiệu: {{ getSelectedProduct()?.brand?.name || 'N/A' }}
+        </small>
+      </div>
+
+      <!-- Color Selection -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Màu sắc</label>
+        
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="colorType"
+            id="predefinedColor"
+            [value]="false"
+            [(ngModel)]="isCustomColor"
+            (ngModelChange)="onColorTypeChange()"
+          />
+          <label class="form-check-label" for="predefinedColor">
+            Chọn màu có sẵn
+          </label>
+        </div>
+
+        <div *ngIf="!isCustomColor" class="color-grid mb-3">
+          <div
+            *ngFor="let color of predefinedColors"
+            class="color-option"
+            [class.selected]="variant.color === color.value"
+            (click)="variant.color = color.value"
+          >
+            <div
+              class="color-box"
+              [style.background-color]="color.color"
+              [style.border]="color.value === 'White' ? '1px solid #ddd' : 'none'"
+            ></div>
+            <div class="color-name">{{ color.name }}</div>
+          </div>
+        </div>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="colorType"
+            id="customColor"
+            [value]="true"
+            [(ngModel)]="isCustomColor"
+            (ngModelChange)="onColorTypeChange()"
+          />
+          <label class="form-check-label" for="customColor">
+            Màu sắc tùy chỉnh
+          </label>
+        </div>
+
+        <input
+          *ngIf="isCustomColor"
+          type="text"
+          class="form-control"
+          [(ngModel)]="customColor"
+          name="customColor"
+          placeholder="Nhập màu sắc tùy chỉnh (ví dụ: Xanh navy)"
+          [required]="isCustomColor"
+        />
+      </div>
+
+      <!-- Size Selection -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Kích thước</label>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="sizeType"
+            id="predefinedSize"
+            [value]="false"
+            [(ngModel)]="isCustomSize"
+            (ngModelChange)="onSizeTypeChange()"
+          />
+          <label class="form-check-label" for="predefinedSize">
+            Chọn kích thước có sẵn
+          </label>
+        </div>
+
+        <div *ngIf="!isCustomSize" class="size-grid mb-3">
+          <button
+            *ngFor="let size of predefinedSizes"
+            type="button"
+            class="btn size-btn"
+            [class.btn-primary]="variant.size === size"
+            [class.btn-outline-secondary]="variant.size !== size"
+            (click)="variant.size = size"
+          >
+            {{ size }}
+          </button>
+        </div>
+
+        <div class="form-check mb-2">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="sizeType"
+            id="customSize"
+            [value]="true"
+            [(ngModel)]="isCustomSize"
+            (ngModelChange)="onSizeTypeChange()"
+          />
+          <label class="form-check-label" for="customSize">
+            Kích thước tùy chỉnh
+          </label>
+        </div>
+
+        <input
+          *ngIf="isCustomSize"
+          type="text"
+          class="form-control"
+          [(ngModel)]="customSize"
+          name="customSize"
+          placeholder="Nhập kích thước tùy chỉnh (ví dụ: 32/34)"
+          [required]="isCustomSize"
+        />
+      </div>
+
+      <!-- Price -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Giá (VND)</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="variant.price"
+          name="price"
+          placeholder="Nhập giá"
+          required
+          min="0"
+          step="1000"
+        />
+      </div>
+
+      <!-- Stock Quantity -->
+      <div class="form-group mb-3">
+        <label class="form-label required">Số lượng tồn kho</label>
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="variant.stockQuantity"
+          name="stockQuantity"
+          placeholder="Nhập số lượng tồn kho"
+          required
+          min="0"
+        />
+      </div>
+
+      <!-- Summary Card -->
+      <div class="card bg-light" *ngIf="variant.productId > 0">
+        <div class="card-body">
+          <h6 class="card-title">Xem trước biến thể</h6>
+          <div class="row">
+            <div class="col-6">
+              <small class="text-muted">Sản phẩm:</small>
+              <div>{{ getSelectedProduct()?.name }}</div>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Màu sắc:</small>
+              <div>{{ isCustomColor ? customColor : variant.color }}</div>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Kích thước:</small>
+              <div>{{ isCustomSize ? customSize : variant.size }}</div>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Giá:</small>
+              <div class="fw-bold">{{ variant.price | currency: 'VND':'symbol':'1.0-0' }}</div>
+            </div>
+            <div class="col-6">
+              <small class="text-muted">Tồn kho:</small>
+              <div>{{ variant.stockQuantity }} sản phẩm</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="onCancel()"
+      [disabled]="loading"
+    >
+      <i class="fas fa-times me-1"></i>Hủy
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="onSubmit()"
+      [disabled]="loading || !variantForm.valid"
+    >
+      <i class="fas fa-check me-1" *ngIf="!loading"></i>
+      <i class="fas fa-spinner fa-spin me-1" *ngIf="loading"></i>
+      {{ loading ? 'Đang tạo...' : 'Tạo biến thể' }}
+    </button>
+  </mat-dialog-actions>
+</div>

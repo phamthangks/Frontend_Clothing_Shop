@@ -1,0 +1,189 @@
+/* ===== CORE CARD LAYOUT ===== */
+
+/* Only apply equal-height flex to product grid, not filter bar */
+.product-view .product-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Each card column inside product grid */
+.product-view .product-grid .col-md-4 {
+  display: flex;
+  align-items: stretch;
+  margin-bottom: 1.5rem;
+}
+
+/* Card container */
+.product-item {
+  background: transparent;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.product-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+/* Title bar */
+.product-title {
+  background-color: #000;
+  color: #fff;
+  padding: 12px 10px;
+  text-align: left;
+  font-weight: 600;
+  font-size: .95rem;
+  line-height: 1.1;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+}
+
+/* Image section */
+.product-image {
+  flex: 1 1 auto;
+  display: block;
+  background: #f3f3f3;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.product-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform .35s ease;
+}
+
+.product-image:hover img {
+  transform: scale(1.05);
+}
+
+/* Action icons */
+.product-action {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 8px;
+  z-index: 20;
+}
+
+.product-action a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.95);
+  color: #000;
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* Price & Buy bar */
+.product-price {
+  background: #000;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  flex-shrink: 0;
+}
+
+.product-price h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.product-price .btn {
+  background: #ff6f61;
+  color: #fff;
+  border: none;
+  padding: .45rem .9rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  text-decoration: none;
+}
+
+.product-price .btn:hover {
+  background: #e85a4f;
+  color: #fff;
+}
+
+/* General fixes */
+.product-item * {
+  box-sizing: border-box;
+}
+
+.product-image img,
+.product-image a,
+.product-title a {
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+.product-price h3,
+.product-title h5,
+.product-title a {
+  margin: 0;
+  padding: 0;
+}
+
+/* Equal height cards */
+@media (min-width: 768px) {
+  .product-item { min-height: 420px; }
+}
+
+@media (max-width: 767px) {
+  .product-view .product-grid .col-md-4 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .product-item { min-height: auto; }
+  .product-title { min-height: 56px; }
+}
+
+/* Match container backgrounds */
+.product-view,
+.product-view .container-fluid {
+  background: transparent;
+}
+
+/* Active state for selected category and brand */
+.sidebar-widget .nav-link.active {
+  background-color: #ff6f61 !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.sidebar-widget .nav-link:hover {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.sidebar-widget .nav-link.active:hover {
+  background-color: #e85a4f !important;
+  color: #fff !important;
+}
+
+/* Add left padding to categories */
+.sidebar-widget.category .nav-link {
+  padding-left: 1rem;
+}

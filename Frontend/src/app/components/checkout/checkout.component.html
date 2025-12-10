@@ -1,0 +1,167 @@
+<!-- Spinner Loading - Hiển thị khi isLoading === true -->
+<div *ngIf="isLoading" id="app-loading">
+  <div class="lds-spinner">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<!-- Breadcrumb -->
+<div class="breadcrumb-wrap">
+  <div class="container-fluid">
+    <ul class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a routerLink="/home">Trang chủ</a>
+      </li>
+      <li class="breadcrumb-item">
+        <a routerLink="/product">Sản phẩm</a>
+      </li>
+      <li class="breadcrumb-item active">Thanh toán</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Checkout -->
+<div class="checkout">
+  <div class="container-fluid">
+    <!-- Gói toàn bộ các control trong cùng một formGroup -->
+    <form [formGroup]="checkoutForm">
+      <div class="row">
+        <!-- Billing Address -->
+        <div class="col-lg-8">
+          <div class="checkout-inner">
+            <div class="billing-address">
+              <div class="row">
+                <h2 class="col-md-9">Địa chỉ nhận hàng</h2>
+                <!-- Thêm nút Chọn địa chỉ -->
+                <button
+                  class="col-md-3 btn btn-success"
+                  type="button"
+                  (click)="openAddressDialog()"
+                >
+                  Chọn địa chỉ
+                </button>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <label>Tên đầy đủ</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="fullname"
+                    placeholder="Tên đầy đủ"
+                    readonly
+                  />
+                </div>
+                <div class="col-md-12">
+                  <label>Số điện thoại</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="phoneNumber"
+                    placeholder="Số điện thoại"
+                    readonly
+                  />
+                </div>
+                <div class="col-md-12">
+                  <label>Địa chỉ</label>
+                  <input
+                    class="form-control"
+                    type="text"
+                    formControlName="address"
+                    placeholder="Địa chỉ"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary & Payment Methods -->
+        <div class="col-lg-4">
+          <div class="checkout-inner">
+            <div class="checkout-summary">
+              <h1>Tổng đơn hàng</h1>
+              <div *ngFor="let item of checkoutItems">
+                <div
+                  class="checkout-item-details d-flex justify-content-between align-items-start mb-2"
+                >
+                  <!-- Tên sản phẩm + biến thể -->
+                  <div>
+                    <p class="mb-1">
+                      <strong>{{ item.name }}</strong>
+                    </p>
+                    <small *ngIf="item.size || item.color" class="text-muted">
+                      <span *ngIf="item.size">Size: {{ item.size }}</span>
+                      <span *ngIf="item.size && item.color">, </span>
+                      <span *ngIf="item.color">Màu: {{ item.color }}</span>
+                    </small>
+                  </div>
+
+                  <!-- Giá & số lượng bên phải -->
+                  <div class="text-end text-muted">
+                    {{ item.price | number : "1.0-0" }}đ ×
+                    {{ item.numberOfProducts }}
+                  </div>
+                </div>
+
+                <hr class="my-2" />
+              </div>
+              <p class="sub-total">
+                Tạm tính
+                <span>{{ totalPrice | number : "1.0-0" }}đ</span>
+              </p>
+              <p class="ship-cost">
+                Phí vận chuyển
+                <span>{{ shippingCost | number : "1.0-0" }}đ</span>
+              </p>
+              <h2>
+                Tổng cộng
+                <span>{{ grandTotal | number : "1.0-0" }}đ</span>
+              </h2>
+            </div>
+
+            <div class="checkout-payment">
+              <div class="payment-methods">
+                <h1>Phương thức thanh toán</h1>
+                <div
+                  *ngFor="let method of paymentMethods"
+                  class="payment-method"
+                >
+                  <div class="custom-control custom-radio">
+                    <!-- Đồng nhất thuộc tính name với formControlName -->
+                    <input
+                      type="radio"
+                      [value]="method.id"
+                      formControlName="paymentMethod"
+                      class="custom-control-input"
+                      [id]="method.id"
+                      name="paymentMethod"
+                    />
+                    <label class="custom-control-label" [for]="method.id">
+                      {{ method.label }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="checkout-btn">
+                <button type="button" (click)="placeOrder()">Đặt hàng</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

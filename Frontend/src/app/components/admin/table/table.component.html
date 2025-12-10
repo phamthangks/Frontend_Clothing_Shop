@@ -1,0 +1,7 @@
+<!-- src/app/components/admin/table/table.component.html -->
+<h2 class="mb-3">Top Best-Selling Products</h2>
+
+<ag-grid-angular style="width: 100%; height: 400px;" class="ag-theme-alpine" [columnDefs]="columnDefs"
+  [rowData]="rowData" [pagination]="true" [paginationPageSize]="10" [animateRows]="true"
+  (gridReady)="onGridReady($event)">
+</ag-grid-angular>

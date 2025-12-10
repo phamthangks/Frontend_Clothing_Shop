@@ -1,0 +1,36 @@
+/* Add styling for the canvas elements to create an outline with a drop shadow */
+.chart {
+    border: 2px solid #ccc; /* Light gray border around the canvas */
+    border-radius: 10px; /* Optional: Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Drop shadow effect */
+    padding: 10px; /* Optional: Padding inside the canvas container */
+    margin-bottom: 20px; /* Space between charts */
+    background-color: #fff; /* White background to make the shadow more visible */
+    /* Set specific width and height to make each chart bigger */
+    width: 100%; /* Ensure the charts take up full width within their columns */
+    height: 350px; /* Adjust the height to make the chart bigger */
+}
+
+/* Remove hover effect */
+.chart:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Keep the original shadow without hover effect */
+    transform: none; /* Remove zoom effect on hover */
+    transition: none; /* Remove transition effect */
+}
+
+/* Optional: Add some space between the charts */
+.row {
+    margin-top: 20px;
+}
+
+.col-lg-4 {
+    margin-bottom: 20px;
+    padding: 0 10px; /* Add some padding to separate the columns */
+}
+
+/* Optional: Style headers for each chart */
+h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}

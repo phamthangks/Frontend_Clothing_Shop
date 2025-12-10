@@ -1,0 +1,227 @@
+.modern-dialog.delete-dialog {
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 24px 16px;
+    border-bottom: 2px solid #f0f0f0;
+
+    .header-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      i {
+        font-size: 28px;
+        color: white;
+      }
+
+      &.danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+    }
+
+    .header-text {
+      flex: 1;
+
+      .dialog-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 4px 0;
+      }
+
+      .dialog-subtitle {
+        font-size: 14px;
+        color: #dc2626;
+        margin: 0;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .dialog-content {
+    padding: 24px !important;
+
+    .warning-box {
+      background: #fff7ed;
+      border: 2px solid #fed7aa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 16px;
+
+      .warning-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        i {
+          font-size: 24px;
+          color: white;
+        }
+      }
+
+      .warning-text {
+        flex: 1;
+
+        .warning-title {
+          font-size: 16px;
+          font-weight: 700;
+          color: #92400e;
+          margin: 0 0 12px 0;
+        }
+
+        .order-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+          color: #92400e;
+          margin: 0 0 12px 0;
+          padding: 12px;
+          background: rgba(251, 191, 36, 0.1);
+          border-radius: 6px;
+
+          i {
+            color: #f59e0b;
+            font-size: 16px;
+          }
+
+          span {
+            font-weight: 500;
+          }
+        }
+
+        .warning-note {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          color: #92400e;
+          margin: 0;
+          font-style: italic;
+
+          i {
+            color: #f59e0b;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+
+    button {
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+
+      i {
+        margin-right: 6px;
+        font-size: 14px;
+      }
+    }
+
+    .btn-cancel {
+      color: #6b7280;
+
+      &:hover:not(:disabled) {
+        background: #f3f4f6;
+        color: #374151;
+      }
+    }
+
+    .btn-delete {
+      color: white;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .modern-dialog.delete-dialog {
+    .dialog-header {
+      padding: 20px 16px 12px;
+
+      .header-icon {
+        width: 48px;
+        height: 48px;
+
+        i {
+          font-size: 24px;
+        }
+      }
+
+      .header-text {
+        .dialog-title {
+          font-size: 18px;
+        }
+
+        .dialog-subtitle {
+          font-size: 13px;
+        }
+      }
+    }
+
+    .dialog-content {
+      padding: 16px !important;
+
+      .warning-box {
+        flex-direction: column;
+        text-align: center;
+
+        .warning-icon {
+          margin: 0 auto;
+        }
+      }
+    }
+
+    .dialog-actions {
+      padding: 12px 16px;
+      flex-direction: column-reverse;
+
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

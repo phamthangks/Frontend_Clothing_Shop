@@ -1,0 +1,7 @@
+<div class="otp-box">
+    <h2>Xác thực OTP</h2>
+    <form [formGroup]="otpForm">
+        <input type="text" formControlName="otp" placeholder="Nhập mã OTP" maxlength="6" />
+        <button type="button" (click)="verifyOtp()">Xác thực</button>
+    </form>
+</div>

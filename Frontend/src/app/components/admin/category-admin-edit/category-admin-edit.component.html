@@ -1,0 +1,45 @@
+<div class="compact-dialog">
+  <h2 mat-dialog-title class="dialog-title">
+    <i class="fas fa-edit"></i>
+    Sửa danh mục
+  </h2>
+
+  <mat-dialog-content class="dialog-content">
+    <form #categoryForm="ngForm" (ngSubmit)="onSubmit()">
+      <!-- Error Message Display -->
+      <div *ngIf="errorMessage" class="error-message">
+        <i class="fas fa-exclamation-circle"></i>
+        {{ errorMessage }}
+      </div>
+
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Tên danh mục</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="category.name" 
+          name="name" 
+          required 
+          maxlength="255"
+          placeholder="Nhập tên danh mục..." 
+          autocomplete="off" />
+      </mat-form-field>
+
+      <mat-dialog-actions align="end">
+        <button 
+          mat-button 
+          type="button" 
+          (click)="onCancel()" 
+          [disabled]="isSubmitting">
+          Hủy
+        </button>
+        <button 
+          mat-raised-button 
+          color="primary"
+          type="submit" 
+          [disabled]="!category.name || isSubmitting">
+          {{ isSubmitting ? 'Đang cập nhật...' : 'Cập nhật' }}
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+</div>

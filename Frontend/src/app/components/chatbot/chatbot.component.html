@@ -1,0 +1,12 @@
+<!-- chatbot.component.html -->
+<div class="chatbot-header">
+  <span>Hỗ trợ trực tuyến</span>
+  <button class="close-btn" (click)="close()">×</button>
+</div>
+<div class="chatbot-body">
+  <p>hello</p>
+</div>
+<div class="chatbot-input">
+  <input [(ngModel)]="userMsg" (keyup.enter)="send()" placeholder="Nhập tin nhắn…" />
+  <button (click)="send()">Gửi</button>
+</div>

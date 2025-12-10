@@ -1,0 +1,61 @@
+/* vẫn giữ .chatbot-container chỉ cho toggle button */
+.chatbot-container {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 1000;
+}
+
+.chatbot-toggle {
+  /* tăng z-index để nút nổi trên khung chat */
+  z-index: 1001; 
+}
+
+
+/* chat window giờ fixed luôn */
+.chatbot-window {
+position: fixed !important;
+  bottom: 24px !important;   /* cho khung chat cách đáy 24px */
+  right: 24px !important;
+  width: 360px;
+  height: 500px;
+  /* —— thêm flexbox để chia vùng scroll và input —— */
+  display: flex;
+  flex-direction: column;
+
+  transform: translateY(100%) scale(0.8);
+  transform-origin: bottom right;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .3s ease-out, opacity .3s ease-out;
+
+  background: white;
+  border-radius: 8px 8px 0 0;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  overflow: hidden;         /* scroll nằm ở vùng body thôi */
+  z-index: 9999 !important;
+}
+
+.chatbot-window.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* —— vùng hiển thị message, sẽ scroll khi nhiều tin nhắn —— */
+.chatbot-body {
+  flex: 1;                  /* chiếm hết không gian còn lại */
+  padding: 12px 16px;
+  overflow-y: auto;
+  background: #F5F7FA;
+}
+
+/* —— input và button gửi luôn nằm đáy khung —— */
+.chatbot-input {
+  flex-shrink: 0;           /* không bị co lại */
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}

@@ -1,0 +1,180 @@
+.dialog-container {
+  min-height: 500px;
+}
+
+.dialog-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.dialog-content {
+  padding: 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.dialog-actions {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+
+  &.required::after {
+    content: ' *';
+    color: #dc3545;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+// Color Grid
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.color-option {
+  cursor: pointer;
+  text-align: center;
+  padding: 0.5rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #4e73df;
+    background-color: #f8f9fc;
+  }
+
+  &.selected {
+    border-color: #4e73df;
+    background-color: #e3f2fd;
+  }
+}
+
+.color-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  margin: 0 auto 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.color-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+// Size Grid
+.size-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.size-btn {
+  min-width: 60px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+
+  &.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+  }
+}
+
+// Summary Card
+.card {
+  margin-top: 1.5rem;
+  border: 1px solid #dee2e6;
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .row > div {
+    margin-bottom: 0.75rem;
+  }
+
+  small {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+  }
+}
+
+// Form Controls
+.form-control,
+.form-select {
+  font-size: 0.9rem;
+
+  &:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+  }
+}
+
+.form-check-input:checked {
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+
+// Buttons
+.btn {
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #4e73df;
+  border-color: #4e73df;
+
+  &:hover:not(:disabled) {
+    background-color: #2e59d9;
+    border-color: #2653d4;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  &:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+  }
+}
+
+

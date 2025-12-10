@@ -1,0 +1,50 @@
+<div class="review-dialog-container">
+    <!-- Left side: Display product image -->
+    <div class="left-side">
+        <img [src]="getImageUrl(data.product.productImageUrl)" alt="{{ data.product.name }}"
+            class="product-image" />
+    </div>
+
+    <!-- Right side: Review details -->
+    <div class="right-side">
+        <h2 class="dialog-title">Đánh giá {{ data.product.name }}</h2>
+        <div class="dialog-content">
+            <form>
+                <!-- Star rating section -->
+                <div class="form-group rating-group">
+                    <label>Đánh giá:</label>
+                    <div class="star-rating">
+                        <i class="far fa-star" [ngClass]="{'fas': rating >= 1}" (click)="rating = 1"></i>
+                        <i class="far fa-star" [ngClass]="{'fas': rating >= 2}" (click)="rating = 2"></i>
+                        <i class="far fa-star" [ngClass]="{'fas': rating >= 3}" (click)="rating = 3"></i>
+                        <i class="far fa-star" [ngClass]="{'fas': rating >= 4}" (click)="rating = 4"></i>
+                        <i class="far fa-star" [ngClass]="{'fas': rating >= 5}" (click)="rating = 5"></i>
+                    </div>
+                </div>
+
+                <!-- Review content input section -->
+                <div class="form-group">
+                    <textarea [(ngModel)]="reviewText" name="reviewText" class="review-text" rows="4"
+                        placeholder="Hãy chia sẻ cảm nhận của bạn..."></textarea>
+                </div>
+
+                <!-- Media upload section -->
+                <div class="form-group upload-section">
+                    <label for="file-upload" class="upload-label">
+                        <i class="fa fa-camera"></i> Thêm ảnh / video
+                    </label>
+                    <input id="file-upload" type="file" multiple (change)="onFileSelected($event)" />
+                    <div class="preview-list">
+                        <div class="preview-item" *ngFor="let url of previewUrls">
+                            <img [src]="url" alt="preview" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="dialog-actions">
+            <button class="btn btn-secondary" (click)="onCancel()">Hủy</button>
+            <button class="btn btn-primary" (click)="onSubmit()">Gửi đánh giá</button>
+        </div>
+    </div>
+</div>

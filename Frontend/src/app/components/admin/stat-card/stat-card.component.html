@@ -1,0 +1,15 @@
+<!-- src/app/components/admin/stat-card/stat-card.component.html -->
+<div class="card text-white mb-4" [ngClass]="'bg-' + bgColor">
+  <div class="card-body">
+    {{ title }}
+  </div>
+  <div class="card-footer d-flex align-items-center justify-content-between">
+    <!-- Apply the number pipe to round the stat value to a maximum of 2 decimal places -->
+    <span class="stat-value big-stat-value">
+      {{ isCurrency ? ('$' + (value | number:'1.0-2')) : (value | number:'1.0-2') }}
+    </span>    
+    <div class="small text-white">
+      <i class="fas fa-angle-right"></i>
+    </div>
+  </div>
+</div>

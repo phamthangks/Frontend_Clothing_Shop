@@ -1,0 +1,12 @@
+<app-header></app-header>
+
+<aside class="chatbot-container">
+  <button class="chatbot-toggle" (click)="toggleChat()">💬</button>
+</aside>
+
+<div class="chatbot-window" [class.open]="showChat">
+  <app-chatbot (closed)="toggleChat()"></app-chatbot>
+</div>
+
+<router-outlet></router-outlet>
+<app-footer></app-footer>

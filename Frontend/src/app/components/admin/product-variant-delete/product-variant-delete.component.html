@@ -1,0 +1,133 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title class="text-danger">
+      <i class="fas fa-exclamation-triangle me-2"></i>Xác nhận xóa
+    </h2>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="alert alert-danger" role="alert">
+      <div class="d-flex align-items-start">
+        <i class="fas fa-exclamation-circle fa-2x me-3"></i>
+        <div>
+          <h5 class="alert-heading">Cảnh báo!</h5>
+          <p class="mb-0">
+            Bạn đang thực hiện xóa biến thể sản phẩm này. Thao tác này <strong>không thể hoàn tác</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header bg-light">
+        <h6 class="mb-0">
+          <i class="fas fa-info-circle me-2"></i>Thông tin chi tiết biến thể
+        </h6>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="text-muted small">Tên sản phẩm</label>
+            <div class="fw-bold">{{ variant.product?.name || 'N/A' }}</div>
+            <small class="text-muted">
+              {{ variant.product?.category?.name || '' }} |
+              {{ variant.product?.brand?.name || '' }}
+            </small>
+          </div>
+
+          <div class="col-6">
+            <label class="text-muted small">ID biến thể</label>
+            <div class="fw-bold">#{{ variant.id }}</div>
+          </div>
+
+          <div class="col-6">
+            <label class="text-muted small">Giá</label>
+            <div class="fw-bold">
+              {{ variant.price | currency: 'VND':'symbol':'1.0-0' }}
+            </div>
+          </div>
+
+          <div class="col-6">
+            <label class="text-muted small">Màu sắc</label>
+            <div>
+              <span
+                class="badge"
+                [style.background-color]="variant.color"
+                [style.color]="'white'"
+              >
+                {{ variant.color }}
+              </span>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <label class="text-muted small">Kích thước</label>
+            <div>
+              <span class="badge bg-secondary">{{ variant.size }}</span>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <label class="text-muted small">Trạng thái tồn kho</label>
+            <div [class]="getStockClass(variant.stockQuantity)">
+              <i [class]="getStockIcon(variant.stockQuantity)"></i>
+              <strong>{{ variant.stockQuantity }}</strong> sản phẩm
+              <span
+                class="badge ms-2"
+                [ngClass]="{
+                  'bg-success': variant.stockQuantity > 10,
+                  'bg-warning': variant.stockQuantity > 0 && variant.stockQuantity <= 10,
+                  'bg-danger': variant.stockQuantity === 0
+                }"
+              >
+                {{
+                  variant.stockQuantity === 0
+                    ? 'Hết hàng'
+                    : variant.stockQuantity < 10
+                    ? 'Tồn kho thấp'
+                    : 'Bình thường'
+                }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-warning" role="alert" *ngIf="variant.stockQuantity > 0">
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      <strong>Lưu ý:</strong> Biến thể này còn
+      <strong>{{ variant.stockQuantity }}</strong> sản phẩm trong kho. Sau khi xóa, số lượng tồn kho này sẽ mất vĩnh viễn.
+    </div>
+
+    <div class="confirmation-text">
+      <p class="mb-2"><strong>Trước khi xóa biến thể này, hãy xác nhận:</strong></p>
+      <ul class="mb-0">
+        <li>Biến thể này không có đơn hàng đang chờ xử lý</li>
+        <li>Bạn đã sao lưu tất cả dữ liệu cần thiết</li>
+        <li>Bạn hiểu rằng thao tác này không thể hoàn tác</li>
+      </ul>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button
+      type="button"
+      class="btn btn-secondary"
+      (click)="onCancel()"
+      [disabled]="loading"
+    >
+      <i class="fas fa-times me-1"></i>Hủy
+    </button>
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="onConfirm()"
+      [disabled]="loading"
+    >
+      <i class="fas fa-trash me-1" *ngIf="!loading"></i>
+      <i class="fas fa-spinner fa-spin me-1" *ngIf="loading"></i>
+      {{ loading ? 'Đang xóa...' : 'Xác nhận xóa' }}
+    </button>
+  </mat-dialog-actions>
+</div>

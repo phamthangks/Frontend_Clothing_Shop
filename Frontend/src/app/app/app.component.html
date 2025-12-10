@@ -1,0 +1,20 @@
+<!-- Nội dung chính của ứng dụng -->
+<router-outlet></router-outlet>
+
+<!-- Loading overlay chỉ xuất hiện khi isLoading$ là true -->
+<div *ngIf="isLoading$ | async" id="app-loading">
+    <div class="lds-spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>

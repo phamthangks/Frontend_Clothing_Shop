@@ -1,0 +1,178 @@
+<div class="purchase-order-view">
+  <!-- Header Section -->
+  <div class="admin-header">
+    <div class="header-content">
+      <div class="header-left">
+        <button (click)="goBack()" class="back-btn">
+          <fa-icon [icon]="faArrowLeft"></fa-icon>
+        </button>
+        <div class="header-text">
+          <h1 class="page-title">
+            <fa-icon [icon]="faBoxes" class="title-icon"></fa-icon>
+            Chi tiết đơn nhập hàng
+          </h1>
+          <p class="page-subtitle" *ngIf="purchaseOrder">Đơn nhập hàng #{{ purchaseOrder.id }}</p>
+        </div>
+      </div>
+      <div class="header-right" *ngIf="purchaseOrder">
+        <button (click)="printPurchaseOrder()" class="btn btn-secondary">
+          <fa-icon [icon]="faPrint"></fa-icon>
+          In đơn
+        </button>
+        <a 
+          [routerLink]="['/adminDashboard/purchase-order/edit', purchaseOrder.id]" 
+          class="btn btn-warning">
+          <fa-icon [icon]="faEdit"></fa-icon>
+          Chỉnh sửa
+        </a>
+        <button (click)="deletePurchaseOrder()" class="btn btn-danger">
+          <fa-icon [icon]="faTrash"></fa-icon>
+          Xóa
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <fa-icon [icon]="faSpinner" class="spinner"></fa-icon>
+    <p>Đang tải chi tiết đơn nhập hàng...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <h3>Lỗi</h3>
+    <p>{{ error }}</p>
+    <button (click)="goBack()" class="btn btn-primary">
+      <fa-icon [icon]="faArrowLeft"></fa-icon>
+      Quay lại
+    </button>
+  </div>
+
+  <!-- Purchase Order Details -->
+  <div *ngIf="purchaseOrder && !loading" class="purchase-order-details">
+    <!-- Basic Information -->
+    <div class="info-section">
+      <h3 class="section-title">Thông tin cơ bản</h3>
+      <div class="info-grid">
+        <div class="info-item">
+          <label>Mã đơn nhập:</label>
+          <span class="value">#{{ purchaseOrder.id }}</span>
+        </div>
+        <div class="info-item">
+          <label>Nhà cung cấp:</label>
+          <span class="value">{{ purchaseOrder.supplierName }}</span>
+        </div>
+        <div class="info-item">
+          <label>Người nhập:</label>
+          <span class="value">
+            <fa-icon [icon]="faUser" class="icon"></fa-icon>
+            {{ purchaseOrder.user?.fullname || 'N/A' }}
+          </span>
+        </div>
+        <div class="info-item">
+          <label>Ngày nhập:</label>
+          <span class="value">
+            <fa-icon [icon]="faCalendarAlt" class="icon"></fa-icon>
+            {{ formatDate(purchaseOrder.createdAt) }}
+          </span>
+        </div>
+        <div class="info-item">
+          <label>Tổng sản phẩm:</label>
+          <span class="value">{{ getTotalQuantity() }} sản phẩm</span>
+        </div>
+        <div class="info-item">
+          <label>Tổng giá trị:</label>
+          <span class="value total-value">{{ formatCurrency(getTotalValue()) }}</span>
+        </div>
+        <div class="info-item full-width" *ngIf="purchaseOrder.note">
+          <label>Ghi chú:</label>
+          <span class="value">{{ purchaseOrder.note }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Details -->
+    <div class="products-section">
+      <h3 class="section-title">Chi tiết sản phẩm</h3>
+      
+      <div class="products-table">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Sản phẩm</th>
+              <th>Màu sắc</th>
+              <th>Kích thước</th>
+              <th>Số lượng</th>
+              <th>Giá nhập</th>
+              <th>Thành tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let detail of purchaseOrder.purchaseOrderDetails; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td class="product-name">
+                <div class="product-info">
+                  <div class="product-image">
+                    <fa-icon [icon]="faBoxes"></fa-icon>
+                  </div>
+                  <div class="product-details">
+                    <h4>{{ detail.productVariant?.product?.name }}</h4>
+                    <p class="product-description">{{ detail.productVariant?.product?.description }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="color-cell">
+                <span class="color-badge">{{ detail.productVariant?.color }}</span>
+              </td>
+              <td class="size-cell">
+                <span class="size-badge">{{ detail.productVariant?.size }}</span>
+              </td>
+              <td class="text-center quantity">{{ detail.quantity }}</td>
+              <td class="text-right price">{{ formatCurrency(detail.importPrice) }}</td>
+              <td class="text-right total">{{ formatCurrency(detail.totalPrice) }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="total-row">
+              <td colspan="6" class="text-right total-label">Tổng cộng:</td>
+              <td class="text-right total-amount">{{ formatCurrency(getTotalValue()) }}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="card-icon">
+          <fa-icon [icon]="faBoxes"></fa-icon>
+        </div>
+        <div class="card-content">
+          <h4>{{ purchaseOrder.purchaseOrderDetails.length }}</h4>
+          <p>Loại sản phẩm</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="card-icon">
+          <fa-icon [icon]="faDollarSign"></fa-icon>
+        </div>
+        <div class="card-content">
+          <h4>{{ getTotalQuantity() }}</h4>
+          <p>Tổng số lượng</p>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="card-icon">
+          <fa-icon [icon]="faDollarSign"></fa-icon>
+        </div>
+        <div class="card-content">
+          <h4>{{ formatCurrency(getTotalValue()) }}</h4>
+          <p>Tổng giá trị</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

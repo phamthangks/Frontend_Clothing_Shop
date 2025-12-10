@@ -1,0 +1,154 @@
+<div class="purchase-order-admin">
+
+  <!-- Header Section -->
+  <div class="admin-header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1 class="page-title">
+          <fa-icon [icon]="faBoxes" class="title-icon"></fa-icon>
+          Quản lý nhập hàng
+        </h1>
+        <p class="page-subtitle">Theo dõi và quản lý các đơn nhập hàng</p>
+      </div>
+      <div class="header-right">
+        <a routerLink="/adminDashboard/purchase-order/create" class="btn btn-primary">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          Tạo đơn nhập hàng
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid" *ngIf="statistics">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <fa-icon [icon]="faBoxes"></fa-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ statistics.totalOrders || 0 }}</h3>
+        <p>Tổng đơn nhập</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <fa-icon [icon]="faDollarSign"></fa-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ formatCurrency(statistics.totalValue || 0) }}</h3>
+        <p>Tổng giá trị</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <fa-icon [icon]="faCalendarAlt"></fa-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ statistics.thisMonthOrders || 0 }}</h3>
+        <p>Tháng này</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">
+        <fa-icon [icon]="faDollarSign"></fa-icon>
+      </div>
+      <div class="stat-content">
+        <h3>{{ formatCurrency(statistics.thisMonthValue || 0) }}</h3>
+        <p>Giá trị tháng này</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="search-section">
+    <div class="search-box">
+      <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        (input)="onSearch()"
+        placeholder="Tìm kiếm theo nhà cung cấp, ghi chú, người nhập..."
+        class="search-input">
+    </div>
+  </div>
+
+  <!-- Purchase Orders Table -->
+  <div class="table-container">
+    <div class="table-header">
+      <h3>Danh sách đơn nhập hàng</h3>
+      <span class="record-count">{{ filteredPurchaseOrders.length }} đơn</span>
+    </div>
+
+    <div class="table-responsive" *ngIf="!loading; else loadingTemplate">
+      <table class="purchase-order-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nhà cung cấp</th>
+            <th>Người nhập</th>
+            <th>Ngày nhập</th>
+            <th>Số sản phẩm</th>
+            <th>Tổng giá trị</th>
+            <th>Ghi chú</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let po of filteredPurchaseOrders" class="purchase-order-row">
+            <td class="po-id">#{{ po.id }}</td>
+            <td class="supplier-name">{{ po.supplierName }}</td>
+            <td class="user-info">
+              <div class="user-avatar">
+                <fa-icon [icon]="faUser"></fa-icon>
+              </div>
+              <span>{{ po.user?.fullname || 'N/A' }}</span>
+            </td>
+            <td class="created-date">{{ formatDate(po.createdAt) }}</td>
+            <td class="product-count">{{ po.purchaseOrderDetails.length }} sản phẩm</td>
+            <td class="total-value">{{ formatCurrency(getTotalValue(po)) }}</td>
+            <td class="note">{{ po.note || '-' }}</td>
+            <td class="actions">
+              <div class="action-buttons">
+                <a 
+                  [routerLink]="['/adminDashboard/purchase-order/view', po.id]" 
+                  class="btn btn-sm btn-info"
+                  title="Xem chi tiết">
+                  <fa-icon [icon]="faEye"></fa-icon>
+                </a>
+                <a 
+                  [routerLink]="['/adminDashboard/purchase-order/edit', po.id]" 
+                  class="btn btn-sm btn-warning"
+                  title="Chỉnh sửa">
+                  <fa-icon [icon]="faEdit"></fa-icon>
+                </a>
+                <button 
+                  (click)="deletePurchaseOrder(po.id)" 
+                  class="btn btn-sm btn-danger"
+                  title="Xóa">
+                  <fa-icon [icon]="faTrash"></fa-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="filteredPurchaseOrders.length === 0" class="empty-state">
+        <fa-icon [icon]="faBoxes" class="empty-icon"></fa-icon>
+        <h3>Không có đơn nhập hàng nào</h3>
+        <p>Chưa có đơn nhập hàng nào được tạo. Hãy tạo đơn nhập hàng đầu tiên!</p>
+        <a routerLink="/adminDashboard/purchase-order/create" class="btn btn-primary">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          Tạo đơn nhập hàng
+        </a>
+      </div>
+    </div>
+
+    <ng-template #loadingTemplate>
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Đang tải dữ liệu...</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

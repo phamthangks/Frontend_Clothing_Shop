@@ -1,0 +1,105 @@
+<div class="shipping-address-container">
+    <div class="header d-flex justify-content-between align-items-center mb-4">
+        <h4 class="mb-0">Địa chỉ</h4>
+        <button class="btn btn-success" (click)="openAddModal()">
+            <i class="fa fa-plus"></i> Thêm địa chỉ mới
+        </button>
+    </div>
+
+    <div *ngFor="let item of addresses" class="address-card card mb-3" [attr.id]="'row-' + item.id">
+        <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div class="address-info mb-3 mb-md-0">
+                <h5 class="card-title mb-1">{{ item.fullname }}</h5>
+                <p class="card-text mb-1">
+                    <strong>Số điện thoại</strong> {{ item.phoneNumber }}
+                </p>
+                <p class="card-text mb-1">{{ item.address }}</p>
+                <p *ngIf="item.isDefault" class="text-default badge badge-success p-1">Mặc định</p>
+            </div>
+            <div class="address-actions text-right">
+                <button class="btn btn-info mb-2" (click)="openEditModal(item)">
+                    <i class="fa fa-edit"></i> Sửa địa chỉ
+                </button>
+                <div *ngIf="!item.isDefault">
+                    <button class="btn btn-primary mb-2" (click)="setDefaultAddress(item.id)">
+                        <i class="fa fa-check"></i> Đặt mặc định
+                    </button>
+                    <button class="btn btn-danger" (click)="deleteAddress(item.id)">
+                        <i class="fa fa-trash"></i> Xóa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Thêm Địa Chỉ Mới -->
+    <div class="modal" [ngStyle]="{'display': showAddModal ? 'block' : 'none'}">
+        <div class="modal-content">
+            <span class="close-btn" (click)="closeAddModal()">&times;</span>
+            <h4>Thêm địa chỉ mới</h4>
+            <div class="form-group">
+                <label>Tên đầy đủ</label>
+                <input class="form-control" type="text" [(ngModel)]="currentAddress.fullname" placeholder="Tên đầy đủ">
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại</label>
+                <input class="form-control" type="text" [(ngModel)]="currentAddress.phoneNumber"
+                    placeholder="Số điện thoại">
+            </div>
+            <div class="form-group address-input" style="position: relative;">
+                <label>Địa chỉ</label>
+                <input class="form-control" type="text" [(ngModel)]="currentAddress.address" (input)="onAddressInput()"
+                    placeholder="Địa chỉ">
+                <!-- Danh sách gợi ý -->
+                <ul *ngIf="suggestions.length > 0" class="suggestions-list">
+                    <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)"
+                        (mouseover)="hovered = suggestion" (mouseleave)="hovered = null"
+                        [ngStyle]="{'background': hovered === suggestion ? '#efefef' : '#fff'}">
+                        {{ suggestion.title }}
+                    </li>
+                </ul>
+            </div>
+            <!-- Bản đồ để người dùng chọn vị trí -->
+            <div id="mapAdd" class="map-container"></div>
+            <div class="modal-footer mt-3">
+                <button class="btn btn-success" (click)="saveNewAddress()">Lưu</button>
+                <button class="btn btn-secondary" (click)="closeAddModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Sửa Địa Chỉ -->
+    <div class="modal" [ngStyle]="{'display': showEditModal ? 'block' : 'none'}">
+        <div class="modal-content">
+            <span class="close-btn" (click)="closeEditModal()">&times;</span>
+            <h4>Sửa địa chỉ</h4>
+            <div class="form-group">
+                <label>Tên đầy đủ</label>
+                <input class="form-control" type="text" [(ngModel)]="currentAddress.fullname" placeholder="Tên đầy đủ">
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại</label>
+                <input class="form-control" type="text" [(ngModel)]="currentAddress.phoneNumber"
+                    placeholder="Số điện thoại">
+            </div>
+            <div class="form-group address-input" style="position: relative;">
+                <label>Địa chỉ</label>
+                <input class="form-control" type="text" [(ngModel)]="currentAddress.address" (input)="onAddressInput()"
+                    placeholder="Địa chỉ">
+                <!-- Danh sách gợi ý -->
+                <ul *ngIf="suggestions.length > 0" class="suggestions-list">
+                    <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)"
+                        (mouseover)="hovered = suggestion" (mouseleave)="hovered = null"
+                        [ngStyle]="{'background': hovered === suggestion ? '#efefef' : '#fff'}">
+                        {{ suggestion.title }}
+                    </li>
+                </ul>
+            </div>
+            <div id="mapEdit" class="map-container"></div>
+            <div class="modal-footer mt-3">
+                <button class="btn btn-success" (click)="saveEditAddress()">Lưu</button>
+                <button class="btn btn-secondary" (click)="closeEditModal()">Hủy</button>
+            </div>
+        </div>
+    </div>
+</div>

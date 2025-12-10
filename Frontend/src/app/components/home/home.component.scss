@@ -1,0 +1,18 @@
+.brand-slider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .brand-item {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .brand-item img {
+    max-width: 100px;
+    height: auto;
+  }
+  .product-item {
+    margin-bottom: 20px; /* Điều chỉnh giá trị theo nhu cầu */
+  }

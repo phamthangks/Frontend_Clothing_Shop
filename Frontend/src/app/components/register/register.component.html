@@ -1,0 +1,67 @@
+<div class="register-box">
+    <div class="register-logo">
+        <a><b>Đăng ký</b></a>
+    </div>
+    <div class="card">
+        <div class="card-body register-card-body">
+            <p class="login-box-msg">Đăng ký tài khoản mới</p>
+
+            <form [formGroup]="registerForm">
+                <div class="input-group mb-3">
+                    <input type="text" formControlName="fullName" class="form-control" placeholder="Tên đầy đủ" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-user"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="tel" formControlName="phoneNumber" class="form-control" placeholder="Số điện thoại"
+                         pattern="[0-9]{10,11}" maxlength="11"
+                        (input)="validatePhoneNumber($event)" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-phone"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="password" formControlName="password" class="form-control" placeholder="Mật khẩu" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group mb-3">
+                    <input type="password" formControlName="confirmPassword" class="form-control"
+                        placeholder="Nhập lại mật khẩu" />
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-8">
+                        <div class="icheck-primary">
+                            <input type="checkbox" id="agreeTerms" formControlName="agreeTerms" />
+                            <label for="agreeTerms">Tôi đồng ý với <a href="#">điều khoản</a></label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <button type="button" (click)="registerUser()" class="btn btn-primary btn-block">
+                            Đăng ký
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <a routerLink="/admin/login" class="text-center">Tôi đã có tài khoản</a>
+        </div>
+    </div>
+</div>

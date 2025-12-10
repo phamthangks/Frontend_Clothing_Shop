@@ -1,0 +1,178 @@
+/* ===========================
+   1. Container & Toggle Button
+   =========================== */
+.chatbot-container {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 1000;
+}
+
+.chatbot-toggle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #FF6B6B, #FFD93D);
+  color: white;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.chatbot-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+
+/* ===========================
+   2. Chat Window Container
+   =========================== */
+.chatbot-window {
+  position: fixed !important;
+  bottom: 90px !important;
+  right: 24px !important;
+  width: 360px;
+  max-height: 500px;
+  display: flex;
+  flex-direction: column;
+
+  /* Ẩn ban đầu */
+  transform: translateY(100%) scale(0.8);
+  transform-origin: bottom right;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform .3s cubic-bezier(.25,.8,.25,1), opacity .3s ease;
+  
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+  overflow: hidden;
+  z-index: 9999 !important;
+}
+
+.chatbot-window.open {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+/* ===========================
+   3. Header
+   =========================== */
+.chatbot-header {
+  background: #FF6B6B;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+}
+
+.chatbot-header .close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: color .2s ease;
+}
+
+.chatbot-header .close-btn:hover {
+  color: #FFD93D;
+}
+
+
+/* ===========================
+   4. Message Body & Scrollbar
+   =========================== */
+.chatbot-body {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  background: #F5F7FA;
+}
+
+/* custom scrollbar (Webkit) */
+.chatbot-body::-webkit-scrollbar {
+  width: 6px;
+}
+.chatbot-body::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+
+/* ===========================
+   5. Message Bubbles
+   =========================== */
+.msg-user,
+.msg-bot {
+  max-width: 80%;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.msg-user {
+  background: #007bff;
+  color: white;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-bot {
+  background: #E9ECEF;
+  color: #333;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+
+/* ===========================
+   6. Input & Send Button
+   =========================== */
+.chatbot-input {
+  padding: 12px;
+  display: flex;
+  gap: 8px;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+
+.chatbot-input input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  transition: border-color .2s;
+}
+
+.chatbot-input input:focus {
+  border-color: #007bff;
+}
+
+.chatbot-input button {
+  background: #007bff;
+  border: none;
+  color: white;
+  padding: 0 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background .2s;
+}
+
+.chatbot-input button:hover {
+  background: #0056b3;
+}

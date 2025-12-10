@@ -1,0 +1,364 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- Sidebar Navigation -->
+    <div class="col-md-3">
+      <div
+        class="nav flex-column nav-pills"
+        role="tablist"
+        aria-orientation="vertical"
+      >
+        <!-- Orders Tab -->
+        <a
+          class="nav-link"
+          id="orders-nav"
+          data-toggle="pill"
+          role="tab"
+          [ngClass]="{ 'active-tab': selectedTab === 'orders' }"
+          (click)="setTab('orders')"
+        >
+          <i
+            class="fa"
+            [ngClass]="
+              selectedTab === 'orders' ? 'fa-hand-pointer' : 'fa-shopping-bag'
+            "
+          ></i>
+          Đơn hàng
+        </a>
+        <!-- Address Tab -->
+        <a
+          class="nav-link"
+          id="address-nav"
+          data-toggle="pill"
+          role="tab"
+          [ngClass]="{ 'active-tab': selectedTab === 'address' }"
+          (click)="setTab('address')"
+        >
+          <i
+            class="fa"
+            [ngClass]="
+              selectedTab === 'address'
+                ? 'fa-hand-pointer'
+                : 'fa-map-marker-alt'
+            "
+          ></i>
+          Địa chỉ
+        </a>
+        <!-- Account Details Tab -->
+        <a
+          class="nav-link"
+          id="account-nav"
+          data-toggle="pill"
+          role="tab"
+          [ngClass]="{ 'active-tab': selectedTab === 'account' }"
+          (click)="setTab('account')"
+        >
+          <i
+            class="fa"
+            [ngClass]="
+              selectedTab === 'account' ? 'fa-hand-pointer' : 'fa-user'
+            "
+          ></i>
+          Thông tin tài khoản
+        </a>
+        <!-- Logout -->
+        <a class="nav-link" (click)="logout()">
+          <i class="fa fa-sign-out-alt"></i> Đăng xuất
+        </a>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="col-md-9">
+      <ng-container [ngSwitch]="selectedTab">
+        <!-- Order Tab -->
+        <div *ngSwitchCase="'orders'">
+          <!-- Menu lọc trạng thái đơn hàng -->
+          <div class="order-status-menu mb-3 d-flex justify-content-center">
+            <button
+              *ngFor="let status of statuses"
+              (click)="selectedStatus = status"
+              [ngClass]="{ 'active-status': selectedStatus === status }"
+              class="btn mr-2 status-btn"
+            >
+              {{ statusLabels[status] || status }}
+              <span class="badge badge-secondary ml-1">
+                {{ countOrdersByStatus(status) }}
+              </span>
+            </button>
+          </div>
+
+          <!-- Hiển thị danh sách đơn hàng đã được lọc -->
+          <div
+            *ngIf="filteredOrders && filteredOrders.length > 0; else noOrders"
+          >
+            <div class="row">
+              <div class="col-md-12" *ngFor="let order of filteredOrders">
+                <div class="card mb-3">
+                  <div class="card-body">
+                    <div class="row align-items-center">
+                      <!-- Cột hình ảnh chồng lên nhau ở bên trái -->
+                      <div class="col-md-2">
+                        <div class="product-images">
+                          <img
+                            *ngFor="let productImg of order.products; let i = index"
+                            [src]="getImageUrl(productImg.productImageUrl)"
+                            alt="{{ productImg.name }}"
+                            [ngStyle]="{
+                              top: i * 5 + 'px',
+                              left: i * 5 + 'px',
+                              'z-index': order.products.length - i
+                            }"
+                          />
+                        </div>
+                      </div>
+
+                      <!-- Cột thông tin đơn hàng -->
+                      <div class="col-md-8">
+                        <p class="card-text">
+                          <strong>Tên đầy đủ:</strong> {{ order.fullnameS
+                          }}<br />
+                          <strong>Số điện thoại:</strong> {{ order.phoneNumberS
+                          }}<br />
+                          <strong>Địa chỉ:</strong> {{ order.addressS }}<br />
+                          <strong>Phương thức thanh toán:</strong>
+                          {{ order.paymentMethod }}<br />
+                          <strong>Ngày đặt hàng:</strong>
+                          {{ order.orderDate | date : "short" }}<br />
+                          <strong>Tổng cộng:</strong>
+                          {{ order.totalMoney | currency : "" : "" : "1.0-0" }}đ
+                        </p>
+                      </div>
+
+                      <!-- Cột nút toggle -->
+                      <div class="col-md-2 text-right">
+                        <button
+                          class="btn btn-link"
+                          (click)="order.expanded = !order.expanded"
+                        >
+                          <i
+                            class="fa"
+                            [ngClass]="
+                              order.expanded
+                                ? 'fa-chevron-up'
+                                : 'fa-chevron-down'
+                            "
+                          ></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- Chi tiết sản phẩm (mở rộng khi toggle) -->
+                    <div
+                      class="slide-container"
+                      [ngClass]="{ expanded: order.expanded }"
+                    >
+                      <div class="checkout-summary">
+                        <h5>Chi tiết sản phẩm</h5>
+
+                        <div
+                          *ngFor="let product of order.products"
+                          class="product-item"
+                        >
+                          <div
+                            class="checkout-item-details d-flex justify-content-between align-items-start mb-2"
+                          >
+                            <!-- Tên sản phẩm + biến thể -->
+                            <div class="flex-grow-1">
+                              <p class="mb-1">
+                                <strong>{{ product.name }}</strong>
+                              </p>
+
+                              <!-- Display size and color if available -->
+                              <div
+                                *ngIf="product.size || product.color"
+                                class="variant-info"
+                              >
+                                <small class="text-muted">
+                                  <span *ngIf="product.size">
+                                    <strong>Size:</strong> {{ product.size }}
+                                  </span>
+                                  <span *ngIf="product.size && product.color">
+                                    |
+                                  </span>
+                                  <span *ngIf="product.color">
+                                    <strong>Màu:</strong> {{ product.color }}
+                                  </span>
+                                </small>
+                              </div>
+
+                              <!-- Show message if no variant info -->
+                              <div
+                                *ngIf="!product.size && !product.color"
+                                class="text-warning small"
+                              >
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Không có thông tin biến thể
+                              </div>
+                            </div>
+
+                            <!-- Giá & số lượng bên phải -->
+                            <div class="text-end text-muted ms-3">
+                              {{ product.price | number : "1.0-0" }}đ ×
+                              {{ product.numberOfProducts }}
+                              <div class="text-dark fw-bold mt-1">
+                                =
+                                {{
+                                  product.price * product.numberOfProducts
+                                    | number : "1.0-0"
+                                }}đ
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Nút đánh giá -->
+                          <div
+                            class="review-section mt-2"
+                            *ngIf="order.status === 'completed'"
+                          >
+                            <ng-container
+                              *ngIf="
+                                reviewedMap[product.productId];
+                                else notReviewed
+                              "
+                            >
+                              <div class="d-flex gap-2 align-items-center">
+                                <span class="badge bg-success">
+                                  <i class="fas fa-check-circle me-1"></i>
+                                  Đã đánh giá
+                                </span>
+                                <button
+                                  class="btn btn-outline-secondary btn-sm"
+                                  (click)="editReview(product)"
+                                >
+                                  <i class="fas fa-edit me-1"></i>
+                                  Sửa đánh giá
+                                </button>
+                              </div>
+                            </ng-container>
+
+                            <ng-template #notReviewed>
+                              <button
+                                class="btn btn-primary btn-sm"
+                                (click)="reviewProduct(product)"
+                              >
+                                <i class="fas fa-star me-1"></i>
+                                Đánh giá ngay
+                              </button>
+                            </ng-template>
+                          </div>
+
+                          <hr class="my-2" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Các nút hành động -->
+                    <div class="action-buttons mt-3">
+                      <button
+                        *ngIf="order.status === 'processing'"
+                        class="btn btn-secondary btn-sm mr-2"
+                        (click)="changeOrderAddress(order)"
+                      >
+                        Đổi địa chỉ
+                      </button>
+                      <button
+                        *ngIf="
+                          order.status === 'processing' ||
+                          order.status === 'addressChanged'
+                        "
+                        class="btn btn-danger btn-sm"
+                        (click)="cancelOrder(order)"
+                      >
+                        Hủy đơn hàng
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-template #noOrders>
+            <div class="text-center py-4">
+              <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+              <p>Không tìm thấy đơn hàng nào.</p>
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Address Tab -->
+        <div *ngSwitchCase="'address'">
+          <app-address></app-address>
+        </div>
+
+        <!-- Account Details Tab -->
+        <div *ngSwitchCase="'account'">
+          <h3>Thông tin tài khoản</h3>
+
+          <!-- Phần cập nhật thông tin -->
+          <h5>Chỉnh sửa thông tin</h5>
+          <div class="row">
+            <div class="col-md-6">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Tên đầy đủ"
+                [(ngModel)]="fullname"
+              />
+            </div>
+            <div class="col-md-6">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Số điện thoại"
+                [(ngModel)]="phoneNumber"
+              />
+            </div>
+            <div class="col-md-12 mt-3">
+              <button class="btn btn-primary" (click)="updateAccount()">
+                Cập nhật
+              </button>
+            </div>
+          </div>
+
+          <hr />
+
+          <h4>Đổi mật khẩu</h4>
+          <div class="row">
+            <div class="col-md-12">
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Mật khẩu hiện tại"
+                [(ngModel)]="currentPassword"
+              />
+            </div>
+            <div class="col-md-6 mt-3">
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Mật khẩu mới"
+                [(ngModel)]="newPassword"
+              />
+            </div>
+            <div class="col-md-6 mt-3">
+              <input
+                type="password"
+                class="form-control"
+                placeholder="Nhập lại mật khẩu mới"
+                [(ngModel)]="confirmPassword"
+              />
+            </div>
+            <div class="col-md-12 mt-3">
+              <button class="btn btn-primary" (click)="changePassword()">
+                Lưu
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

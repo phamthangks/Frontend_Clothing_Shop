@@ -1,0 +1,144 @@
+<div class="admin-container" [class.sidebar-collapsed]="isCollapsed">
+  <!-- Top Navigation Bar -->
+  <header class="top-navbar">
+    <div class="navbar-left">
+      <button class="menu-toggle" (click)="toggleSidebar()">
+        <fa-icon [icon]="isCollapsed ? faAngleRight : faAngleLeft"></fa-icon>
+      </button>
+      <div class="navbar-brand">
+        <fa-icon [icon]="faTshirt" class="brand-icon"></fa-icon>
+        <span class="brand-title">Fashion Admin</span>
+      </div>
+    </div>
+
+    <div class="navbar-center">
+      <div class="search-box" *ngIf="!isMobileView">
+        <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+        <input type="text" placeholder="Tìm kiếm sản phẩm, đơn hàng..." class="search-input">
+      </div>
+    </div>
+
+    <div class="navbar-right">
+      <button class="nav-icon-btn mobile-search" (click)="toggleMobileSearch()" *ngIf="isMobileView">
+        <fa-icon [icon]="faSearch"></fa-icon>
+      </button>
+      
+      <button class="nav-icon-btn" title="Thông báo">
+        <fa-icon [icon]="faBell"></fa-icon>
+        <span class="badge">3</span>
+      </button>
+
+      <div class="user-menu" (click)="toggleUserDropdown()">
+        <div class="user-avatar">
+          <fa-icon [icon]="faUserCircle"></fa-icon>
+        </div>
+        <div class="user-info" *ngIf="!isMobileView">
+          <span class="user-name">{{ userName || 'Admin' }}</span>
+          <span class="user-role">Quản trị viên</span>
+        </div>
+        <fa-icon [icon]="faChevronDown" class="dropdown-icon"></fa-icon>
+
+        <!-- User Dropdown Menu -->
+        <div class="user-dropdown" *ngIf="showUserDropdown">
+          <a routerLink="/account" class="dropdown-item">
+            <fa-icon [icon]="faUser"></fa-icon>
+            <span>Tài khoản của tôi</span>
+          </a>
+          <a routerLink="/adminDashboard/settings" class="dropdown-item">
+            <fa-icon [icon]="faCog"></fa-icon>
+            <span>Cài đặt</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a (click)="logout()" class="dropdown-item logout">
+            <fa-icon [icon]="faSignOutAlt"></fa-icon>
+            <span>Đăng xuất</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Search Bar -->
+  <div class="mobile-search-bar" *ngIf="showMobileSearch && isMobileView">
+    <div class="search-box-mobile">
+      <fa-icon [icon]="faSearch" class="search-icon"></fa-icon>
+      <input type="text" placeholder="Tìm kiếm..." class="search-input">
+      <button class="close-search" (click)="toggleMobileSearch()">
+        <fa-icon [icon]="faTimes"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar" [class.collapsed]="isCollapsed">
+    <div class="sidebar-content">
+      <!-- Dashboard Link -->
+      <div class="nav-section">
+        <a routerLink="/adminDashboard/welcome" 
+           routerLinkActive="active" 
+           [routerLinkActiveOptions]="{exact: true}"
+           class="nav-item dashboard">
+          <fa-icon [icon]="faHome" class="nav-icon"></fa-icon>
+          <span class="nav-text">Trang chủ</span>
+        </a>
+      </div>
+
+      <!-- Main Navigation -->
+      <div class="nav-section">
+        <div class="nav-section-title" *ngIf="!isCollapsed">
+          <span>Quản lý</span>
+        </div>
+        <a *ngFor="let item of navItems" 
+           [routerLink]="item.link" 
+           routerLinkActive="active"
+           class="nav-item">
+          <fa-icon [icon]="item.icon" class="nav-icon"></fa-icon>
+          <span class="nav-text">{{ item.label }}</span>
+          <span class="nav-badge" *ngIf="item.badge">{{ item.badge }}</span>
+        </a>
+      </div>
+
+      <!-- Bottom Section -->
+      <div class="sidebar-footer" *ngIf="!isCollapsed">
+        <div class="footer-info">
+          <fa-icon [icon]="faInfoCircle" class="info-icon"></fa-icon>
+          <div class="info-text">
+            <span class="version">Version 2.0</span>
+            <span class="copyright">© 2025 Fashion Shop</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="bottom-nav" *ngIf="isMobileView">
+    <a routerLink="/adminDashboard/welcome" routerLinkActive="active" class="bottom-nav-item">
+      <fa-icon [icon]="faHome"></fa-icon>
+      <span>Trang chủ</span>
+    </a>
+    <a routerLink="/adminDashboard/product" routerLinkActive="active" class="bottom-nav-item">
+      <fa-icon [icon]="faTshirt"></fa-icon>
+      <span>Sản phẩm</span>
+    </a>
+    <a routerLink="/adminDashboard/purchase-order" routerLinkActive="active" class="bottom-nav-item">
+      <fa-icon [icon]="faTruck"></fa-icon>
+      <span>Nhập hàng</span>
+    </a>
+    <a routerLink="/adminDashboard/order" routerLinkActive="active" class="bottom-nav-item">
+      <fa-icon [icon]="faShoppingCart"></fa-icon>
+      <span>Đơn hàng</span>
+    </a>
+    <a routerLink="/adminDashboard/statistics" routerLinkActive="active" class="bottom-nav-item">
+      <fa-icon [icon]="faChartLine"></fa-icon>
+      <span>Thống kê</span>
+    </a>
+  </nav>
+</div>

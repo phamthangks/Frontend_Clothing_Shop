@@ -1,0 +1,287 @@
+@use 'sass:color';
+
+// Variables
+$primary-color: #2c3e50;
+$primary-color-dark: color.adjust($primary-color, $lightness: -5%);
+$primary-color-darker: color.adjust($primary-color, $lightness: -8%);
+$secondary-color: #e74c3c;
+$accent-color: #3498db;
+$text-primary: #2c3e50;
+$text-secondary: #7f8c8d;
+$bg-light: #f8f9fa;
+$bg-white: #ffffff;
+$border-color: #e0e0e0;
+
+.brand-management-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Shared styles with other admin pages
+.page-header {
+  background: linear-gradient(135deg, $primary-color 0%, $primary-color-darker 100%);
+  padding: 2rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .title-section {
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+      margin: 0 0 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      i {
+        font-size: 2.5rem;
+        color: $secondary-color;
+      }
+    }
+
+    .page-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      margin: 0;
+    }
+  }
+
+  .btn-add {
+    background: $secondary-color;
+    color: white;
+    border: none;
+    padding: 0.85rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba($secondary-color, 0.3);
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 25px rgba($secondary-color, 0.4);
+    }
+  }
+}
+
+.content-card {
+  background: $bg-white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .modern-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background: linear-gradient(135deg, $primary-color 0%, $primary-color-dark 100%);
+      
+      tr th {
+        padding: 1.2rem;
+        text-align: left;
+        font-weight: 600;
+        color: white;
+
+        &.text-center {
+          text-align: center;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid $border-color;
+        transition: all 0.2s;
+
+        &:hover {
+          background: rgba($accent-color, 0.05);
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        td {
+          padding: 1.2rem;
+          color: $text-primary;
+
+          .item-id {
+            font-weight: 700;
+            color: $accent-color;
+          }
+
+          .brand-name {
+            font-weight: 500;
+            font-size: 1.05rem;
+          }
+
+          &.action-cell {
+            text-align: center;
+
+            .action-btn {
+              background: none;
+              border: none;
+              padding: 0.5rem;
+              cursor: pointer;
+              border-radius: 8px;
+              transition: all 0.2s;
+              margin: 0 0.25rem;
+
+              i {
+                font-size: 1.1rem;
+              }
+
+              &.edit {
+                color: $accent-color;
+                &:hover {
+                  background: rgba($accent-color, 0.1);
+                }
+              }
+
+              &.delete {
+                color: $secondary-color;
+                &:hover {
+                  background: rgba($secondary-color, 0.1);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: $text-secondary;
+
+  i {
+    font-size: 4rem;
+    color: $border-color;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    color: $text-primary;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 0;
+
+  .pagination-btn {
+    background: $bg-white;
+    border: 2px solid $border-color;
+    color: $text-primary;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover:not(:disabled) {
+      background: $accent-color;
+      border-color: $accent-color;
+      color: white;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  .pagination-pages {
+    display: flex;
+    gap: 0.5rem;
+
+    .pagination-page {
+      background: $bg-white;
+      border: 2px solid $border-color;
+      color: $text-primary;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s;
+
+      &:hover {
+        background: $bg-light;
+        border-color: $accent-color;
+        color: $accent-color;
+      }
+
+      &.active {
+        background: $secondary-color;
+        border-color: $secondary-color;
+        color: white;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    .header-content {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .title-section .page-title {
+      font-size: 1.5rem;
+
+      i {
+        font-size: 1.8rem;
+      }
+    }
+
+    .btn-add {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .modern-table {
+    font-size: 0.9rem;
+
+    thead tr th,
+    tbody tr td {
+      padding: 0.8rem;
+    }
+  }
+}

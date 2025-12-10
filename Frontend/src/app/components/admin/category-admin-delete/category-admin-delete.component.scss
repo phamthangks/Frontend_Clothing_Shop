@@ -1,0 +1,210 @@
+.modern-dialog.delete-dialog {
+  .dialog-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 24px 24px 16px;
+    border-bottom: 2px solid #f0f0f0;
+
+    .header-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+
+      i {
+        font-size: 28px;
+        color: white;
+      }
+
+      &.danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      }
+    }
+
+    .header-text {
+      flex: 1;
+
+      .dialog-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 4px 0;
+      }
+
+      .dialog-subtitle {
+        font-size: 14px;
+        color: #dc2626;
+        margin: 0;
+      }
+    }
+  }
+
+  .dialog-content {
+    padding: 24px !important;
+
+    .warning-box {
+      background: #fff7ed;
+      border: 2px solid #fed7aa;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 16px;
+
+      .warning-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        i {
+          color: white;
+          font-size: 24px;
+        }
+      }
+
+      .warning-text {
+        flex: 1;
+
+        .warning-title {
+          font-size: 16px;
+          font-weight: 600;
+          color: #92400e;
+          margin: 0 0 12px 0;
+        }
+
+        .category-name {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 15px;
+          color: #1f2937;
+          margin: 0 0 12px 0;
+          padding: 10px;
+          background: white;
+          border-radius: 6px;
+
+          i {
+            color: #f59e0b;
+          }
+
+          strong {
+            color: #dc2626;
+          }
+        }
+
+        .warning-note {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          color: #92400e;
+          margin: 0;
+
+          i {
+            color: #f59e0b;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    .error-banner {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #dc2626;
+
+      i {
+        font-size: 18px;
+      }
+
+      span {
+        flex: 1;
+        font-size: 14px;
+      }
+    }
+
+    .dialog-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #f0f0f0;
+
+      .btn-cancel {
+        padding: 10px 24px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #6b7280;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+
+        i {
+          margin-right: 6px;
+          font-size: 14px;
+        }
+
+        &:hover:not(:disabled) {
+          background: #f9fafb;
+          border-color: #9ca3af;
+          color: #374151;
+        }
+
+        &:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+      }
+
+      .btn-delete {
+        padding: 10px 24px;
+        font-size: 14px;
+        font-weight: 600;
+        color: white;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+
+        i {
+          margin-right: 6px;
+          font-size: 14px;
+        }
+
+        &:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 16px !important;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3) !important;
+}

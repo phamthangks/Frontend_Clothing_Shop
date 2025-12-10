@@ -1,0 +1,18 @@
+/* login.component.css */
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* chiếm 100% chiều cao viewport */
+    background-color: #f4f6f9; /* màu nền tùy chỉnh */
+  }
+  
+  .login-box {
+    width: 100%;
+    max-width: 400px; /* giới hạn độ rộng của form */
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 5px;
+  }
+  

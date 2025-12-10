@@ -1,0 +1,56 @@
+<div class="modern-dialog delete-dialog">
+  <div class="dialog-header">
+    <div class="header-icon danger">
+      <i class="fas fa-trash-alt"></i>
+    </div>
+    <div class="header-text">
+      <h2 class="dialog-title">Xóa sản phẩm</h2>
+      <p class="dialog-subtitle">Hành động này không thể hoàn tác</p>
+    </div>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="warning-box">
+      <div class="warning-icon">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="warning-text">
+        <p class="warning-title">Bạn có chắc chắn muốn xóa sản phẩm này?</p>
+        <p class="category-name">
+          <i class="fas fa-box"></i>
+          <strong>{{ data.name }}</strong>
+        </p>
+        <p class="warning-note">
+          <i class="fas fa-info-circle"></i>
+          Tất cả dữ liệu liên quan đến sản phẩm này sẽ bị xóa
+        </p>
+      </div>
+    </div>
+    
+    <!-- Error Message Display -->
+    <div *ngIf="errorMessage" class="error-banner">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button 
+      mat-button 
+      class="btn-cancel" 
+      type="button" 
+      (click)="onCancel()" 
+      [disabled]="isDeleting">
+      <i class="fas fa-times"></i>
+      Hủy bỏ
+    </button>
+    <button 
+      mat-raised-button 
+      class="btn-delete" 
+      (click)="onDelete()" 
+      [disabled]="isDeleting">
+      <i class="fas fa-trash"></i>
+      {{ isDeleting ? 'Đang xóa...' : 'Xóa sản phẩm' }}
+    </button>
+  </mat-dialog-actions>
+</div>

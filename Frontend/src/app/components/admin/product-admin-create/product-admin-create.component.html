@@ -1,0 +1,209 @@
+<div class="modern-product-form">
+  <!-- Header -->
+  <div class="form-header">
+    <div class="header-icon">
+      <i class="fas fa-plus-circle"></i>
+    </div>
+    <div class="header-text">
+      <h2 class="form-title">Thêm sản phẩm mới</h2>
+      <p class="form-subtitle">Tạo sản phẩm mới cho cửa hàng của bạn</p>
+    </div>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" #createForm="ngForm" class="product-form">
+    
+    <!-- Basic Information Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-info-circle"></i>
+        <h3>Thông tin cơ bản</h3>
+      </div>
+      
+      <div class="form-grid">
+        <!-- Product Name -->
+        <div class="form-group full-width">
+          <label for="name" class="modern-label">
+            <i class="fas fa-tag"></i>
+            Tên sản phẩm
+            <span class="required">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="name" 
+            class="modern-input" 
+            [(ngModel)]="productData.name" 
+            name="name" 
+            required
+            placeholder="Nhập tên sản phẩm...">
+        </div>
+        
+        <!-- Price -->
+        <div class="form-group">
+          <label for="price" class="modern-label">
+            <i class="fas fa-dollar-sign"></i>
+            Giá sản phẩm
+            <span class="required">*</span>
+          </label>
+          <input 
+            type="number" 
+            id="price" 
+            class="modern-input" 
+            [(ngModel)]="productData.price" 
+            name="price" 
+            required
+            min="0"
+            placeholder="0">
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label for="category" class="modern-label">
+            <i class="fas fa-list"></i>
+            Danh mục
+          </label>
+          <select 
+            id="category" 
+            class="modern-select" 
+            [(ngModel)]="productData.categoryId" 
+            name="category">
+            <option [ngValue]="undefined">-- Chọn danh mục --</option>
+            <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          </select>
+        </div>
+        
+        <!-- Brand -->
+        <div class="form-group">
+          <label for="brand" class="modern-label">
+            <i class="fas fa-copyright"></i>
+            Thương hiệu
+          </label>
+          <select 
+            id="brand" 
+            class="modern-select" 
+            [(ngModel)]="productData.brandId" 
+            name="brand">
+            <option [ngValue]="undefined">-- Chọn thương hiệu --</option>
+            <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+          </select>
+        </div>
+        
+        <!-- Description -->
+        <div class="form-group full-width">
+          <label for="description" class="modern-label">
+            <i class="fas fa-align-left"></i>
+            Mô tả sản phẩm
+          </label>
+          <textarea 
+            id="description" 
+            class="modern-textarea" 
+            [(ngModel)]="productData.description" 
+            name="description" 
+            rows="4"
+            placeholder="Nhập mô tả chi tiết về sản phẩm..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Images Section -->
+    <div class="form-section">
+      <div class="section-header">
+        <i class="fas fa-images"></i>
+        <h3>Hình ảnh sản phẩm</h3>
+      </div>
+
+      <!-- Thumbnail Image -->
+      <div class="image-section">
+        <label class="modern-label">
+          <i class="fas fa-image"></i>
+          Ảnh đại diện
+        </label>
+        <input 
+          type="file" 
+          #thumbnailInput
+          (change)="onThumbnailSelect($event)"
+          accept="image/*"
+          class="d-none">
+        
+        <div class="thumbnail-upload-area">
+          <div 
+            *ngIf="!thumbnailPreview" 
+            class="upload-placeholder main"
+            (click)="thumbnailInput.click()">
+            <div class="upload-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <p class="upload-text">Nhấn để chọn ảnh đại diện</p>
+            <small class="upload-hint">JPG, PNG, GIF, WEBP (tối đa 5MB)</small>
+          </div>
+          
+          <div *ngIf="thumbnailPreview" class="image-preview-card">
+            <img [src]="thumbnailPreview" alt="Thumbnail">
+            <button 
+              type="button" 
+              class="remove-image-btn"
+              (click)="removeThumbnail()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Images -->
+      <div class="image-section">
+        <label class="modern-label">
+          <i class="fas fa-images"></i>
+          Ảnh bổ sung
+        </label>
+        <input 
+          type="file" 
+          #additionalImagesInput
+          (change)="onAdditionalImagesSelect($event)"
+          accept="image/*"
+          multiple
+          class="d-none">
+        
+        <div class="additional-images-grid">
+          <div 
+            class="upload-placeholder small"
+            (click)="additionalImagesInput.click()">
+            <i class="fas fa-plus"></i>
+            <span>Thêm ảnh</span>
+          </div>
+          
+          <div 
+            *ngFor="let image of additionalImages; let i = index" 
+            class="image-preview-card small">
+            <img [src]="image.preview" alt="Additional image">
+            <button 
+              type="button" 
+              class="remove-image-btn"
+              (click)="removeAdditionalImage(i)">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button 
+        type="button" 
+        class="btn-cancel-modern" 
+        (click)="onCancel()"
+        [disabled]="isSubmitting">
+        <i class="fas fa-times"></i>
+        Hủy bỏ
+      </button>
+      <button 
+        type="submit" 
+        class="btn-save-modern"
+        [disabled]="!createForm.valid || isSubmitting">
+        <i class="fas fa-check"></i>
+        <span *ngIf="!isSubmitting">Lưu sản phẩm</span>
+        <span *ngIf="isSubmitting">Đang lưu...</span>
+      </button>
+    </div>
+    
+  </form>
+</div>

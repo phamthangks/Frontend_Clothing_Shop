@@ -1,0 +1,200 @@
+<div class="product-management-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="title-section">
+        <h1 class="page-title">
+          <i class="fas fa-tshirt"></i>
+          Quản lý Sản phẩm
+        </h1>
+        <p class="page-subtitle">Quản lý danh sách sản phẩm thời trang</p>
+      </div>
+      <button class="btn-add-product" (click)="openAddDialog()">
+        <i class="fas fa-plus"></i>
+        Thêm sản phẩm mới
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters and Search Bar -->
+  <div class="filter-section">
+    <div class="filter-row">
+      <!-- Search Box -->
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" class="search-input" placeholder="Tìm kiếm tên sản phẩm, mô tả..." [(ngModel)]="searchTerm"
+          (input)="onSearchChange()">
+      </div>
+
+      <!-- Category Filter -->
+      <div class="filter-group">
+        <select class="filter-select" [(ngModel)]="selectedCategory" (change)="onFilterChange()">
+          <option value="">Tất cả danh mục</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Brand Filter -->
+      <div class="filter-group">
+        <select class="filter-select" [(ngModel)]="selectedBrand" (change)="onFilterChange()">
+          <option value="">Tất cả thương hiệu</option>
+          <option *ngFor="let brand of brands" [value]="brand.id">
+            {{ brand.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Sort -->
+      <div class="filter-group">
+        <select class="filter-select" [(ngModel)]="sortBy" (change)="onSortChange()">
+          <option value="name">Tên A-Z</option>
+          <option value="price">Giá thấp đến cao</option>
+          <option value="id">Mới nhất</option>
+        </select>
+      </div>
+
+      <!-- Clear Filters -->
+      <button class="btn-clear-filters" (click)="clearFilters()"
+        *ngIf="searchTerm || selectedCategory || selectedBrand">
+        <i class="fas fa-times"></i>
+        Xóa bộ lọc
+      </button>
+    </div>
+
+    <!-- Results Summary -->
+    <div class="results-summary">
+      <span class="result-count">
+        <i class="fas fa-box"></i>
+        Hiển thị <strong>{{ filteredProducts.length }}</strong> trong tổng số <strong>{{ totalProducts }}</strong> sản
+        phẩm
+      </span>
+      <button class="view-toggle" (click)="toggleView()">
+        <i [class]="viewMode === 'grid' ? 'fas fa-th' : 'fas fa-list'"></i>
+        {{ viewMode === 'grid' ? 'Dạng lưới' : 'Dạng danh sách' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Grid View -->
+  <div class="products-grid" *ngIf="viewMode === 'grid'">
+    <div class="product-card" *ngFor="let product of filteredProducts">
+      <div class="product-image">
+        <img [src]="getImageUrl(product.image)" [alt]="product.name">
+        <div class="product-overlay">
+          <button class="overlay-btn" (click)="openEditDialog(product)" title="Chỉnh sửa">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="overlay-btn danger" (click)="openDeleteDialog(product)" title="Xóa">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div class="product-info">
+        <h3 class="product-name">{{ product.name }}</h3>
+        <p class="product-description">{{ (product.description || '') | slice:0:60 }}{{ (product.description?.length ||
+          0) > 60 ? '...' : '' }}</p>
+        <div class="product-meta">
+          <span class="meta-item">
+            <i class="fas fa-tag"></i>
+            {{ getCategoryName(product.categoryId) }}
+          </span>
+          <span class="meta-item">
+            <i class="fas fa-copyright"></i>
+            {{ getBrandName(product.brandId) }}
+          </span>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</span>
+          <span class="product-id">#{{ product.id }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredProducts.length === 0">
+      <i class="fas fa-box-open"></i>
+      <h3>Không tìm thấy sản phẩm</h3>
+      <p>Thử điều chỉnh bộ lọc hoặc tìm kiếm của bạn</p>
+    </div>
+  </div>
+
+  <!-- Table View -->
+  <div class="products-table" *ngIf="viewMode === 'table'">
+    <div class="table-container">
+      <table class="modern-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sản phẩm</th>
+            <th>Giá</th>
+            <th>Danh mục</th>
+            <th>Thương hiệu</th>
+            <th>Mô tả</th>
+            <th class="text-center">Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts">
+            <td><span class="table-id">#{{ product.id }}</span></td>
+            <td>
+              <div class="table-product">
+                <img [src]="getImageUrl(product.image)" [alt]="product.name"
+                  class="table-product-img">
+                <span class="table-product-name">{{ product.name }}</span>
+              </div>
+            </td>
+            <td><span class="table-price">{{ product.price | currency:'VND':'symbol':'1.0-0' }}</span></td>
+            <td>{{ getCategoryName(product.categoryId) }}</td>
+            <td>{{ getBrandName(product.brandId) }}</td>
+            <td class="description-cell">{{ (product.description || '') | slice:0:50 }}{{ (product.description?.length
+              || 0) > 50 ? '...' : '' }}</td>
+            <td class="action-cell">
+              <button class="action-btn edit" (click)="openEditDialog(product)" title="Chỉnh sửa">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="action-btn delete" (click)="openDeleteDialog(product)" title="Xóa">
+                <i class="fas fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredProducts.length === 0">
+      <i class="fas fa-box-open"></i>
+      <h3>Không tìm thấy sản phẩm</h3>
+      <p>Thử điều chỉnh bộ lọc hoặc tìm kiếm của bạn</p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-container" *ngIf="totalPages > 1">
+    <button class="pagination-btn" [disabled]="currentPage === 1" (click)="goToPage(1)">
+      <i class="fas fa-angle-double-left"></i>
+      Đầu
+    </button>
+    <button class="pagination-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+      <i class="fas fa-chevron-left"></i>
+      Trước
+    </button>
+    <div class="pagination-pages">
+      <button *ngFor="let page of pages" class="pagination-page" [class.active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+    </div>
+    <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+      Sau
+      <i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="goToPage(totalPages)">
+      Cuối
+      <i class="fas fa-angle-double-right"></i>
+    </button>
+    <span class="pagination-info">Trang {{ currentPage }} / {{ totalPages }} ({{ totalProducts }} sản phẩm)</span>
+  </div>
+</div>
