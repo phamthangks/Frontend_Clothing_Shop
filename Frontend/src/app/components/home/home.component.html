@@ -1,130 +1,185 @@
-<!-- Main Slider Start -->
-<div class="header">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="header-slider normal-slider">
-                    <div *ngFor="let slide of sliderImages" class="header-slider-item">
-                        <img [src]="slide.imageUrl" alt="Slider Image" />
-                        <div class="header-slider-caption">
-                            <p>{{ slide.caption }}</p>
-                            <a class="btn" routerLink="/product">
-                                <i class="fa fa-shopping-cart"></i>Mua ngay
-                            </a>
-                        </div>
-                    </div>
-                </div>
+<!-- Home Hero Section Start -->
+<div class="home-hero-section my-4">
+  <div class="container-fluid">
+    <div class="row g-4">
+      <!-- Left Hero Banner / Slider -->
+      <div class="col-lg-8">
+        <div class="hero-slider-wrapper">
+          <div *ngFor="let slide of sliderImages" class="hero-slide-item">
+            <img [src]="slide.imageUrl" alt="Slider Image" class="hero-slide-img" />
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-caption">
+              <span class="hero-subtitle text-uppercase">Xu hướng 2026</span>
+              <h1 class="hero-title">Thời trang nâng tầm phong cách</h1>
+              <p class="hero-desc">{{ slide.caption }}</p>
+              <a class="btn hero-btn" routerLink="/product">
+                Mua ngay <i class="fa fa-arrow-right ms-2"></i>
+              </a>
             </div>
-            <div class="col-md-6">
-                <div class="header-img">
-                    <div *ngFor="let category of categories" class="img-item">
-                        <img [src]="category.imageUrl" />
-                        <a class="img-text" routerLink="/product">
-                            <p>{{ category.caption }}</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <!-- Right Side Static Promo Cards -->
+      <div class="col-lg-4 d-none d-lg-block">
+        <div class="hero-promo-cards d-flex flex-column h-100 gap-4">
+          <div class="promo-card-item flex-fill position-relative overflow-hidden">
+            <img src="assets/img/category-1.jpg" alt="Promo Summer" class="promo-img" />
+            <div class="promo-overlay"></div>
+            <div class="promo-content">
+              <span class="promo-badge text-uppercase">Hot Trend</span>
+              <h3 class="promo-title">Bộ Sưu Tập Hè</h3>
+              <a routerLink="/product" class="promo-link">Khám phá <i class="fa fa-chevron-right ms-1"></i></a>
+            </div>
+          </div>
+          <div class="promo-card-item flex-fill position-relative overflow-hidden">
+            <img src="assets/img/category-2.jpg" alt="Promo Minimalist" class="promo-img" />
+            <div class="promo-overlay"></div>
+            <div class="promo-content">
+              <span class="promo-badge text-uppercase">BST Mới</span>
+              <h3 class="promo-title">Phong Cách Tối Giản</h3>
+              <a routerLink="/product" class="promo-link">Khám phá <i class="fa fa-chevron-right ms-1"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+<!-- Home Hero Section End -->
 
-<!-- Main Slider End -->
-
-<!-- Brand Start -->
-<div class="brand">
-    <div class="container-fluid">
-        <div class="brand-slider">
-            <div *ngFor="let brand of brandImages" class="brand-item">
-                <img [src]="brand" alt="">
-            </div>
+<!-- Features Section Start -->
+<div class="home-features py-5">
+  <div class="container-fluid">
+    <div class="row g-4 justify-content-center">
+      <div *ngFor="let feature of features" class="col-lg-3 col-md-6">
+        <div class="feature-card-new h-100">
+          <div class="feature-icon-wrapper">
+            <i [class]="feature.icon"></i>
+          </div>
+          <h3 class="feature-title-new">{{ feature.title }}</h3>
+          <p class="feature-desc-new">{{ feature.description }}</p>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<!-- Brand End -->
+<!-- Features Section End -->
 
-<!-- Feature Start-->
-<div class="feature">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div *ngFor="let feature of features" class="col-lg-3 col-md-6 feature-col">
-                <div class="feature-content">
-                    <i [class]="feature.icon"></i>
-                    <h2>{{ feature.title }}</h2>
-                    <p>{{ feature.description }}</p>
-                </div>
-            </div>
-        </div>
+<!-- Brand Partner Section Start -->
+<div class="brand-partner py-4 my-2">
+  <div class="container-fluid">
+    <div class="brand-grid-new d-flex justify-content-around align-items-center flex-wrap gap-4">
+      <div *ngFor="let brand of brandImages" class="brand-item-new">
+        <img [src]="brand" alt="Brand Logo" class="brand-logo-img">
+      </div>
     </div>
+  </div>
 </div>
-<!-- Feature End-->
+<!-- Brand Partner Section End -->
 
-<!-- Category Start-->
-<div class="category">
-    <div class="container-fluid">
-        <div class="row">
-            <div *ngFor="let category of categories" class="col-md-3">
-                <div class="category-item" [ngClass]="category.heightClass">
-                    <img [src]="category.imageUrl" />
-                    <a class="category-name" routerLink="/product">
-                        <p>{{ category.caption }}</p>
-                    </a>
-                </div>
-            </div>
-        </div>
+<!-- Categories Grid Start -->
+<div class="home-categories py-5">
+  <div class="container-fluid">
+    <div class="section-header-new mb-5 text-center">
+      <span class="section-subtitle text-uppercase">Sản phẩm dành cho bạn</span>
+      <h2 class="section-title">Danh mục nổi bật</h2>
+      <div class="section-divider mx-auto"></div>
     </div>
+    <div class="row g-4">
+      <div *ngFor="let category of categories" class="col-md-3">
+        <div class="category-card-new">
+          <div class="category-img-wrapper">
+            <img [src]="category.imageUrl" alt="Category Image" />
+          </div>
+          <div class="category-overlay-new">
+            <div class="category-badge-glass">
+              <span class="category-caption">{{ category.caption }}</span>
+              <a class="category-btn" routerLink="/product">Xem ngay <i class="fa fa-arrow-right ms-1"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- Category End-->
+<!-- Categories Grid End -->
 
-<!-- Call to Action Start -->
-<div class="call-to-action">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-md-6">
-                <h1>Liên hệ chúng tôi: </h1>
-            </div>
-            <div class="col-md-6">
-                <a href="tel:+0123456789">+012-345-6789</a>
-            </div>
+<!-- Call to Action Banner Start -->
+<div class="cta-banner py-5 my-4">
+  <div class="container-fluid">
+    <div class="cta-card-new p-5 text-center text-md-start">
+      <div class="row align-items-center justify-content-between g-4">
+        <div class="col-md-8">
+          <span class="cta-subtitle text-uppercase">Hỗ trợ khách hàng 24/7</span>
+          <h2 class="cta-title mt-2 mb-3">Bạn cần tư vấn trực tiếp về sản phẩm?</h2>
+          <p class="cta-desc mb-0">Đội ngũ CSKH chuyên nghiệp của chúng tôi luôn sẵn sàng giải đáp mọi thắc mắc và hỗ trợ đặt hàng nhanh chóng nhất.</p>
         </div>
+        <div class="col-md-4 text-md-end">
+          <a href="tel:+0123456789" class="btn cta-btn">
+            <i class="fa fa-phone-alt me-2"></i> Gọi ngay: +012-345-6789
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-<!-- Call to Action End -->
+<!-- Call to Action Banner End -->
 
-<!-- Featured Product Start -->
-<div class="featured-product product">
-    <div class="container-fluid">
-        <div class="section-header">
-            <h1>Sản phẩm nổi bật</h1>
-        </div>
-        <div class="row align-items-center product-slider product-slider-4">
-            <div *ngFor="let product of products" class="col-lg-3">
-                <div class="product-item">
-                    <div class="product-title">
-                        <a href="#">{{ product.name }}</a>
-                        <div class="ratting">
-                            <i class="fa fa-star" *ngFor="let star of [].constructor(5); let i = index"></i>
-                        </div>
-                    </div>
-                    <div class="product-image">
-                        <a routerLink="/product-detail/{{ product.id }}">
-                            <img [src]="getImageUrl(product.image)" alt="Product Image">
-                        </a>
-                        <div class="product-action">
-                            <a routerLink="/product-detail/{{ product.id }}"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#"><i class="fa fa-heart"></i></a>
-                            <a routerLink="/product-detail/{{ product.id }}"><i class="fa fa-search"></i></a>
-                        </div>
-                    </div>
-                    <div class="product-price">
-                        <h3><span>$</span>{{ product.price }}</h3>
-                        <a class="btn" routerLink="/product-detail/{{ product.id }}">
-                            <i class="fa fa-shopping-cart"></i>Mua ngay
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!-- Featured Products Section Start -->
+<div class="featured-products py-5">
+  <div class="container-fluid">
+    <div class="section-header-new mb-5 text-center">
+      <span class="section-subtitle text-uppercase">Được mua nhiều nhất</span>
+      <h2 class="section-title">Sản phẩm nổi bật</h2>
+      <div class="section-divider mx-auto"></div>
     </div>
+    <div class="row g-4 product-grid-new">
+      <div *ngFor="let product of products" class="col-lg-3 col-md-6 d-flex align-items-stretch">
+        <div class="product-card-premium">
+          <!-- Card Image & Overlay -->
+          <div class="prod-img-box">
+            <a routerLink="/product-detail/{{ product.id }}" class="d-block h-100">
+              <img [src]="getImageUrl(product.image)" alt="{{ product.name }}" class="prod-img" />
+            </a>
+            <!-- Floating actions (like, search) -->
+            <div class="prod-actions-overlay">
+              <a routerLink="/product-detail/{{ product.id }}" class="prod-action-btn" title="Xem chi tiết">
+                <i class="fa fa-search"></i>
+              </a>
+              <button class="prod-action-btn" title="Yêu thích">
+                <i class="fa fa-heart"></i>
+              </button>
+            </div>
+            <!-- Status Badge -->
+            <span class="prod-badge-new">Bán chạy</span>
+          </div>
+
+          <!-- Card Content -->
+          <div class="prod-info-box d-flex flex-column justify-content-between p-4 flex-grow-1">
+            <div>
+              <!-- Rating Stars -->
+              <div class="rating-box mb-2">
+                <i class="fa fa-star star-filled" *ngFor="let star of [1,2,3,4,5]"></i>
+              </div>
+              <!-- Product Title -->
+              <h3 class="prod-title-new mb-2">
+                <a routerLink="/product-detail/{{ product.id }}">{{ product.name }}</a>
+              </h3>
+            </div>
+            
+            <!-- Price and CTA -->
+            <div class="prod-bottom-row d-flex align-items-center justify-content-between mt-3">
+              <div class="prod-price-box">
+                <span class="price-val">{{ product.price | number : "1.0-0" }}đ</span>
+              </div>
+              <a class="btn prod-buy-btn" routerLink="/product-detail/{{ product.id }}">
+                <i class="fa fa-shopping-cart me-1"></i> Mua ngay
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-<!-- Featured Product End -->
+<!-- Featured Products Section End -->

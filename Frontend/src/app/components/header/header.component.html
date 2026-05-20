@@ -1,65 +1,61 @@
-<!-- Top bar Start -->
-<div class="top-bar">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-6">
-                <i class="fa fa-envelope"></i> support&#64;email.com
-            </div>
-            <div class="col-sm-6">
-                <i class="fa fa-phone-alt"></i> +012-345-6789
-            </div>
-        </div>
+<!-- Top Bar Start -->
+<div class="top-bar-new">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="top-contact">
+        <span><i class="fa fa-envelope me-1"></i> support&#64;estore.com</span>
+        <span class="ms-4"><i class="fa fa-phone-alt me-1"></i> +012-345-6789</span>
+      </div>
+      <div class="top-promo text-uppercase d-none d-md-block">
+        Miễn phí giao hàng cho đơn hàng từ 500.000đ
+      </div>
     </div>
+  </div>
 </div>
-<!-- Top bar End -->
+<!-- Top Bar End -->
 
-<!-- Nav Bar Start -->
-<div class="nav">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-            <a routerLink="/" class="navbar-brand">MENU</a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<!-- Unified Main Header Start -->
+<header class="main-header-new sticky-top">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg py-0">
+      <!-- Logo -->
+      <a routerLink="/home" class="navbar-brand-new">
+        <span class="logo-e">E</span><span class="logo-store">Store</span>
+      </a>
 
-            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                <div class="navbar-nav mr-auto">
-                    <a routerLink="/home" class="nav-item nav-link" [class.active]="activeRoute('/home')">Trang chủ</a>
-                    <a routerLink="/product" class="nav-item nav-link"
-                        [class.active]="activeRoute('/product')">Sản phẩm</a>
-                    <a routerLink="/cart" class="nav-item nav-link" [class.active]="activeRoute('/cart')">Giỏ hàng</a>
-                    <a routerLink="/account" class="nav-item nav-link" [class.active]="activeRoute('/account')">Quản lý</a>
-                </div>
-                <div class="navbar-nav ml-auto">
-                    <app-useraccess></app-useraccess>
-                </div>
-            </div>
-        </nav>
-    </div>
-</div>
-<!-- Nav Bar End -->
-<!-- Bottom Bar Start -->
-<div class="bottom-bar">
-    <div class="container-fluid">
-        <div class="row align-items-center">
-            <div class="col-md-3">
-                <div class="logo">
-                    <a href="index.html">
-                        <img src="assets/img/logo.png" alt="Logo">
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-6">
-            </div>
-            <div class="col-md-3">
-                <div class="user">
-                    <a class="btn cart">
-                        <i class="fa fa-shopping-cart"></i>
-                        <span></span>
-                    </a>
-                </div>
-            </div>
+      <!-- Toggler for Mobile -->
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar Content -->
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a routerLink="/home" class="nav-link-new" [class.active]="activeRoute('/home')">Trang chủ</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/product" class="nav-link-new" [class.active]="activeRoute('/product')">Sản phẩm</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/cart" class="nav-link-new" [class.active]="activeRoute('/cart')">Giỏ hàng</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/account" class="nav-link-new" [class.active]="activeRoute('/account')">Quản lý</a>
+          </li>
+        </ul>
+
+        <!-- Action Items (Cart & User Access) -->
+        <div class="header-actions d-flex align-items-center gap-3">
+          <a routerLink="/cart" class="action-btn cart-btn position-relative" title="Giỏ hàng">
+            <i class="fa fa-shopping-cart"></i>
+          </a>
+          <div class="user-access-wrapper">
+            <app-useraccess></app-useraccess>
+          </div>
         </div>
-    </div>
-</div>
-<!-- Bottom Bar End -->
+      </div>
+    </nav>
+  </div>
+</header>
+<!-- Unified Main Header End -->
