@@ -12,6 +12,11 @@ export interface SearchResult {
   distance: number;
 }
 
+export interface SearchProgressResult {
+  progress: number;
+  results?: SearchResult[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,45 +26,32 @@ export class ImageSearchService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Gửi file ảnh lên API và nhận danh sách products
+   * Gửi file ảnh lên API, theo dõi tiến trình upload và nhận danh sách products trong 1 request duy nhất.
    */
-  searchByImage(file: File): Observable<SearchResult[]> {
+  searchByImage(file: File): Observable<SearchProgressResult> {
     const formData = new FormData();
     formData.append('file', file, file.name);
 
-    return this.http.post<{ results: any[] }>(this.apiUrl, formData)
-      .pipe(
-        map(response => response.results as SearchResult[]),
-        catchError(this.handleError)
-      );
-  }
-
-  /**
-   * Theo dõi tiến trình upload (tuỳ chọn)
-   */
-  searchByImageWithProgress(file: File): Observable<number> {
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-
-    return this.http.post(this.apiUrl, formData, {
+    return this.http.post<{ results: any[] }>(this.apiUrl, formData, {
       reportProgress: true,
       observe: 'events'
     }).pipe(
-      map((event: HttpEvent<any>) => {
+      map((event: HttpEvent<{ results: any[] }>) => {
         switch (event.type) {
           case HttpEventType.UploadProgress:
-            return Math.round((event.loaded / (event.total || 1)) * 100);
+            return {
+              progress: Math.round((event.loaded / (event.total || 1)) * 100)
+            };
           case HttpEventType.Response:
-            return 100; // Completed
+            return {
+              progress: 100,
+              results: (event.body?.results || []) as SearchResult[]
+            };
           default:
-            return 0;
+            return { progress: 0 };
         }
       }),
-      catchError(err => {
-        console.error('Upload error:', err);
-        // Trả về 0% nếu có lỗi
-        return of(0);
-      })
+      catchError(this.handleError)
     );
   }
 

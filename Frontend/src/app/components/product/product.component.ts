@@ -170,43 +170,32 @@ export class ProductComponent implements OnInit {
     this.loadingImage = true;
     this.imageUploadProgress = 0;
 
-    // Upload với progress
-    this.imgService.searchByImageWithProgress(file).subscribe({
-      next: (percent) => {
-        this.imageUploadProgress = percent;
-        if (percent === 100) {
-          // Khi upload xong, lấy kết quả
-          this.imgService.searchByImage(file).subscribe({
-            next: (results: SearchResult[]) => {
-              const mapped: Product[] = results.map((r) => ({
-                id: r.id!,
-                name: r.name!,
-                price: r.price!,
-                image: r.image,
-                description: r.description!,
-                categoryId: 0,
-                brandId: 0,
-              }));
+    // Gọi API tìm kiếm ảnh (1 request duy nhất cho cả progress và results)
+    this.imgService.searchByImage(file).subscribe({
+      next: (res) => {
+        this.imageUploadProgress = res.progress;
+        if (res.results) {
+          const mapped: Product[] = res.results.map((r) => ({
+            id: r.id!,
+            name: r.name!,
+            price: r.price!,
+            image: r.image,
+            description: r.description!,
+            categoryId: 0,
+            brandId: 0,
+          }));
 
-              // Gán kết quả image-search. Không gọi loadProducts server-side.
-              this.products = mapped;
-              this.filteredProducts = mapped.slice();
-              this.currentPage = 1;
-              this.loadingImage = false;
-              this.imageUploadProgress = 0;
-              // isImageSearchActive giữ true để template có thể ẩn pagination
-            },
-            error: (err) => {
-              console.error('Error fetching image-search results', err);
-              this.loadingImage = false;
-              this.imageUploadProgress = 0;
-              this.isImageSearchActive = false;
-            },
-          });
+          // Gán kết quả image-search. Không gọi loadProducts server-side.
+          this.products = mapped;
+          this.filteredProducts = mapped.slice();
+          this.currentPage = 1;
+          this.loadingImage = false;
+          this.imageUploadProgress = 0;
+          // isImageSearchActive giữ true để template có thể ẩn pagination
         }
       },
       error: (err) => {
-        console.error('Image search upload error', err);
+        console.error('Error fetching image-search results', err);
         this.loadingImage = false;
         this.imageUploadProgress = 0;
         this.isImageSearchActive = false;

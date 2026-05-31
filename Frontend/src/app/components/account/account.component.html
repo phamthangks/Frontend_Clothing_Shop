@@ -1,7 +1,7 @@
-<div class="container-fluid">
-  <div class="row">
+<div class="account-page container-fluid">
+  <div class="row account-layout">
     <!-- Sidebar Navigation -->
-    <div class="col-md-3">
+    <div class="col-lg-3 col-xl-3 account-sidebar">
       <div
         class="nav flex-column nav-pills"
         role="tablist"
@@ -68,20 +68,20 @@
     </div>
 
     <!-- Content Area -->
-    <div class="col-md-9">
+    <div class="col-lg-9 col-xl-9 account-content">
       <ng-container [ngSwitch]="selectedTab">
         <!-- Order Tab -->
         <div *ngSwitchCase="'orders'">
           <!-- Menu lọc trạng thái đơn hàng -->
-          <div class="order-status-menu mb-3 d-flex justify-content-center">
+          <div class="order-status-menu">
             <button
               *ngFor="let status of statuses"
               (click)="selectedStatus = status"
               [ngClass]="{ 'active-status': selectedStatus === status }"
-              class="btn mr-2 status-btn"
+              class="btn status-btn"
             >
               {{ statusLabels[status] || status }}
-              <span class="badge badge-secondary ml-1">
+              <span class="status-count">
                 {{ countOrdersByStatus(status) }}
               </span>
             </button>
@@ -93,11 +93,11 @@
           >
             <div class="row">
               <div class="col-md-12" *ngFor="let order of filteredOrders">
-                <div class="card mb-3">
-                  <div class="card-body">
-                    <div class="row align-items-center">
+                <div class="card order-card">
+                  <div class="card-body order-card-body">
+                    <div class="row align-items-center order-summary-row">
                       <!-- Cột hình ảnh chồng lên nhau ở bên trái -->
-                      <div class="col-md-2">
+                      <div class="col-auto order-image-col">
                         <div class="product-images">
                           <img
                             *ngFor="let productImg of order.products; let i = index"
@@ -113,8 +113,8 @@
                       </div>
 
                       <!-- Cột thông tin đơn hàng -->
-                      <div class="col-md-8">
-                        <p class="card-text">
+                      <div class="col order-info-col">
+                        <div class="order-meta">
                           <strong>Tên đầy đủ:</strong> {{ order.fullnameS
                           }}<br />
                           <strong>Số điện thoại:</strong> {{ order.phoneNumberS
@@ -126,13 +126,13 @@
                           {{ order.orderDate | date : "short" }}<br />
                           <strong>Tổng cộng:</strong>
                           {{ order.totalMoney | currency : "" : "" : "1.0-0" }}đ
-                        </p>
+                        </div>
                       </div>
 
                       <!-- Cột nút toggle -->
-                      <div class="col-md-2 text-right">
+                      <div class="col-auto order-toggle-col">
                         <button
-                          class="btn btn-link"
+                          class="btn order-toggle-btn"
                           (click)="order.expanded = !order.expanded"
                         >
                           <i
@@ -147,7 +147,7 @@
                       </div>
                     </div>
 
-                    <hr />
+                    <hr class="order-divider" />
 
                     <!-- Chi tiết sản phẩm (mở rộng khi toggle) -->
                     <div
@@ -255,10 +255,10 @@
                     </div>
 
                     <!-- Các nút hành động -->
-                    <div class="action-buttons mt-3">
+                    <div class="action-buttons">
                       <button
                         *ngIf="order.status === 'processing'"
-                        class="btn btn-secondary btn-sm mr-2"
+                        class="btn btn-secondary btn-sm"
                         (click)="changeOrderAddress(order)"
                       >
                         Đổi địa chỉ
